@@ -18,7 +18,10 @@ namespace Game1
         private Texture2D background;
         private Texture2D shuttle;
         private SpriteFont font;
-        private int score = 0; 
+        private int score = 0;
+        private int heroShipY = 250;
+        private int heroShipX = 250;
+        private int speed = 3;
 
         public Game1()
         {
@@ -74,7 +77,7 @@ namespace Game1
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            score++; 
+            score++;
 
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             {
@@ -83,11 +86,33 @@ namespace Game1
             else if (GamePad.GetState(PlayerIndex.One).Buttons.A == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             {
                 System.Console.WriteLine("test :)");
-           //} else if (GamePad.GetState(PlayerIndex.One).Buttons.LeftStick == ButtonState.Pressed)
-           //{
+                //} else if (GamePad.GetState(PlayerIndex.One).Buttons.LeftStick == ButtonState.Pressed)
+                //{
 
             }
 
+            if (score % 1000 == 0 && speed < 10)
+            {
+                speed = speed + 1;
+            }
+            if (Keyboard.GetState().IsKeyDown(Keys.W) && heroShipY > 0)
+            {
+                heroShipY = heroShipY - 1 * speed;
+            }
+            if (Keyboard.GetState().IsKeyDown(Keys.S) &&  heroShipY < 480 - 40)
+            {
+                heroShipY = heroShipY + (1 * speed);
+            }
+            if (Keyboard.GetState().IsKeyDown(Keys.A) && heroShipX > 0)
+            {
+                heroShipX = heroShipX - 1 * speed;
+            }
+            if (Keyboard.GetState().IsKeyDown(Keys.D) && heroShipX < 800 - 40)
+            {
+                heroShipX = heroShipX + 1 * speed;
+            }
+            System.Console.WriteLine(Keyboard.GetState().GetPressedKeys());
+ 
             base.Update(gameTime);
         }
 
@@ -104,8 +129,7 @@ namespace Game1
             spriteBatch.Begin();
 
             spriteBatch.Draw(background, new Rectangle(0, 0, 800, 480), Color.White);
-            spriteBatch.Draw(shuttle, new Vector2(450, 240), Color.White);
-
+            spriteBatch.Draw(shuttle, new Vector2(heroShipX, heroShipY), Color.White);
             spriteBatch.DrawString(font, "Score: " + score, new Vector2(100, 100), Color.White);
 
             spriteBatch.End();
