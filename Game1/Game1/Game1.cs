@@ -15,8 +15,9 @@ namespace Game1
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
-        Texture2D t2d;
-        Rectangle r;
+        private Texture2D background;
+        private Texture2D shuttle;
+
 
         public Game1()
         {
@@ -33,8 +34,6 @@ namespace Game1
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            t2d = new Texture2D(GraphicsDevice, 50, 50);
-            r = new Rectangle(0, 0, 100, 100);
 
             base.Initialize();
         }
@@ -47,6 +46,11 @@ namespace Game1
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            background = Content.Load<Texture2D>("stars");
+
+            shuttle = Content.Load<Texture2D>("shuttle");
+
 
             // TODO: use this.Content to load your game content here
         }
@@ -68,15 +72,16 @@ namespace Game1
         protected override void Update(GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            {
                 Exit();
-            else if(GamePad.GetState(PlayerIndex.One).Buttons.BigButton == ButtonState.Pressed)
-            {
-                System.Console.WriteLine("Big button!");
-            } else if (GamePad.GetState(PlayerIndex.One).Buttons.LeftStick == ButtonState.Pressed)
-            {
-                System.Console.WriteLine(GamePad.GetState(PlayerIndex.One).Buttons.LeftStick);
             }
+            else if (GamePad.GetState(PlayerIndex.One).Buttons.A == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            {
+                System.Console.WriteLine("test :)");
+           //} else if (GamePad.GetState(PlayerIndex.One).Buttons.LeftStick == ButtonState.Pressed)
+           //{
 
+            }
 
             base.Update(gameTime);
         }
@@ -90,14 +95,20 @@ namespace Game1
 
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
+
             spriteBatch.Begin();
 
-            Texture2D t2d = new Texture2D(GraphicsDevice, 50, 50);
-            Rectangle r = new Rectangle(100, 100, 100, 100);
-            spriteBatch.Draw(t2d, r, Color.Bisque);
+            spriteBatch.Draw(background, new Rectangle(0, 0, 800, 480), Color.White);
+            spriteBatch.Draw(shuttle, new Vector2(450, 240), Color.White);
+
+            spriteBatch.End();
+
+
+            // TODO: Add your drawing code here
+
+            Rectangle r = new Rectangle();
             
             base.Draw(gameTime);
-            spriteBatch.End();
         }
     }
 }
