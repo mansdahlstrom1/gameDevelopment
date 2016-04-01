@@ -13,3 +13,9 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin myFont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:TextureFormat=Compressed
+/build:myFont
+
