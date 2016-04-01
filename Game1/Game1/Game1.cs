@@ -7,6 +7,9 @@ namespace Game1
     /// <summary>
     /// This is the main type for your game.
     /// </summary>
+    /// 
+    /// TEST :)
+    /// 
     public class Game1 : Game
     {
         GraphicsDeviceManager graphics;
