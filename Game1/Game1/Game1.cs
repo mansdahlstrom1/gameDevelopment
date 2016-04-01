@@ -77,9 +77,16 @@ namespace Game1
             score++; 
 
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            {
                 Exit();
+            }
+            else if (GamePad.GetState(PlayerIndex.One).Buttons.A == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            {
+                System.Console.WriteLine("test :)");
+           //} else if (GamePad.GetState(PlayerIndex.One).Buttons.LeftStick == ButtonState.Pressed)
+           //{
 
-            // TODO: Add your update logic here
+            }
 
             base.Update(gameTime);
         }
@@ -107,7 +114,7 @@ namespace Game1
             // TODO: Add your drawing code here
 
             Rectangle r = new Rectangle();
-
+            
             base.Draw(gameTime);
         }
     }
