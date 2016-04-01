@@ -15,6 +15,9 @@ namespace Game1
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
+        Texture2D t2d;
+        Rectangle r;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -30,6 +33,8 @@ namespace Game1
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
+            t2d = new Texture2D(GraphicsDevice, 50, 50);
+            r = new Rectangle(0, 0, 100, 100);
 
             base.Initialize();
         }
@@ -64,7 +69,10 @@ namespace Game1
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-
+            else if(GamePad.GetState(PlayerIndex.One).Buttons.A == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            {
+                System.Console.WriteLine("test :)");
+            }
             // TODO: Add your update logic here
 
             base.Update(gameTime);
@@ -79,11 +87,14 @@ namespace Game1
 
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // TODO: Add your drawing code here
+            spriteBatch.Begin();
 
-            Rectangle r = new Rectangle();
-
+            Texture2D t2d = new Texture2D(GraphicsDevice, 50, 50);
+            Rectangle r = new Rectangle(100, 100, 100, 100);
+            spriteBatch.Draw(t2d, r, Color.Bisque);
+            
             base.Draw(gameTime);
+            spriteBatch.End();
         }
     }
 }
