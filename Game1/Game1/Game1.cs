@@ -48,6 +48,12 @@ namespace Game1
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            GameObject go1 = new GameObject();
+            go1.Width = 50;
+            go1.Height = 50;
+            System.Console.WriteLine("Testing Game Object: Height == " + go1.Height);
+
+
             // TODO: use this.Content to load your game content here
         }
 
@@ -90,9 +96,13 @@ namespace Game1
             spriteBatch.Begin();
 
             Texture2D t2d = new Texture2D(GraphicsDevice, 50, 50);
-            Rectangle r = new Rectangle(100, 100, 100, 100);
-            spriteBatch.Draw(t2d, r, Color.Bisque);
-            
+            Color[] data = new Color[50 * 50];
+            for (int i = 0; i < data.Length; ++i) data[i] = Color.Chocolate;
+            t2d.SetData(data);
+
+            Vector2 v2 = new Vector2(50, 50);
+            spriteBatch.Draw(t2d, v2, Color.Black);
+
             base.Draw(gameTime);
             spriteBatch.End();
         }
