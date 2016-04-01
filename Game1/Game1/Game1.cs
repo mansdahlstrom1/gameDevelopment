@@ -69,11 +69,14 @@ namespace Game1
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-            else if(GamePad.GetState(PlayerIndex.One).Buttons.A == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            else if(GamePad.GetState(PlayerIndex.One).Buttons.BigButton == ButtonState.Pressed)
             {
-                System.Console.WriteLine("test :)"); // Testar knapp a
+                System.Console.WriteLine("Big button!");
+            } else if (GamePad.GetState(PlayerIndex.One).Buttons.LeftStick == ButtonState.Pressed)
+            {
+                System.Console.WriteLine(GamePad.GetState(PlayerIndex.One).Buttons.LeftStick);
             }
-            // TODO: Add your update logic here
+
 
             base.Update(gameTime);
         }
