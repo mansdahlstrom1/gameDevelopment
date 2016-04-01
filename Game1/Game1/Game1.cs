@@ -71,7 +71,7 @@ namespace Game1
                 Exit();
             else if(GamePad.GetState(PlayerIndex.One).Buttons.A == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             {
-                System.Console.WriteLine("test :)");
+                System.Console.WriteLine("test :)"); // Testar knapp a
             }
             // TODO: Add your update logic here
 
