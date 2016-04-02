@@ -93,7 +93,7 @@ namespace Game1
 
             if (score % 1000 == 0 && speed < 10)
             {
-                speed = speed + 1;
+                speed++;
             }
             if (Keyboard.GetState().IsKeyDown(Keys.W) && heroShipY > 0)
             {
