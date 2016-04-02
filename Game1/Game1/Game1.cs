@@ -141,5 +141,100 @@ namespace Game1
             
             base.Draw(gameTime);
         }
+
+
+        private void CheckInput()
+        {
+            //A, B, X, Y
+            if (GamePad.GetState(PlayerIndex.One).Buttons.A == ButtonState.Pressed)
+            {
+                System.Console.WriteLine("A");
+            }
+            if (GamePad.GetState(PlayerIndex.One).Buttons.B == ButtonState.Pressed)
+            {
+                System.Console.WriteLine("B");
+            }
+            if (GamePad.GetState(PlayerIndex.One).Buttons.X == ButtonState.Pressed)
+            {
+                System.Console.WriteLine("X");
+            }
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Y == ButtonState.Pressed)
+            {
+                System.Console.WriteLine("Y");
+            }
+
+            //Shoulders & Triggers
+            if (GamePad.GetState(PlayerIndex.One).Buttons.RightShoulder == ButtonState.Pressed)
+            {
+                System.Console.WriteLine("Right Shoulder");
+            }
+            if (GamePad.GetState(PlayerIndex.One).Buttons.LeftShoulder == ButtonState.Pressed)
+            {
+                System.Console.WriteLine("Left Shoulder");
+            }
+            //TODO Triggerz man!
+
+            //Start, back and big button
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Start == ButtonState.Pressed)
+            {
+                System.Console.WriteLine("FPS: " + FPS);
+            }
+            if (GamePad.GetState(PlayerIndex.One).Buttons.BigButton == ButtonState.Pressed)
+            {
+                System.Console.WriteLine("Big Button!");
+            }
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            {
+                Exit();
+            }
+
+            //Left Stick
+            if (GamePad.GetState(PlayerIndex.One).Buttons.LeftStick == ButtonState.Pressed)
+            {
+                System.Console.WriteLine("Left Stick pressed!");
+            }
+            if (GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.X > 0)
+            {
+                System.Console.WriteLine("Left Stick: Right");
+            }
+            if (GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.X < 0)
+            {
+                System.Console.WriteLine("Left Stick: Left");
+            }
+            if (GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.Y > 0)
+            {
+                System.Console.WriteLine("Left Stick: Up");
+            }
+            if (GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.Y < 0)
+            {
+                //stick angle 0-1
+                //System.Console.WriteLine(GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.Y);
+                System.Console.WriteLine("Left Stick: Down");
+            }
+
+            //Right Stick
+            if (GamePad.GetState(PlayerIndex.One).Buttons.RightStick == ButtonState.Pressed)
+            {
+                System.Console.WriteLine("Right Stick pressed!");
+            }
+            if (GamePad.GetState(PlayerIndex.One).ThumbSticks.Right.X > 0)
+            {
+                System.Console.WriteLine("Right Stick: Right");
+            }
+            if (GamePad.GetState(PlayerIndex.One).ThumbSticks.Right.X < 0)
+            {
+                System.Console.WriteLine("Right Stick: Left");
+            }
+            if (GamePad.GetState(PlayerIndex.One).ThumbSticks.Right.Y > 0)
+            {
+                System.Console.WriteLine("Right Stick: Up");
+            }
+            if (GamePad.GetState(PlayerIndex.One).ThumbSticks.Right.Y < 0)
+            {
+                //stick angle 0-1
+                //System.Console.WriteLine(GamePad.GetState(PlayerIndex.One).ThumbSticks.Right.Y);
+                System.Console.WriteLine("Right Stick: Down");
+            }
+        }
     }
 }
