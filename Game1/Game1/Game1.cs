@@ -56,8 +56,8 @@ namespace Game1
 
             background = Content.Load<Texture2D>("stars");
 
-            shuttle = Content.Load<Texture2D>("shuttle");
-
+            shuttle = Content.Load<Texture2D>("images/DogpoolPortrait");
+            
             font = Content.Load<SpriteFont>("myFont"); // Use the name of your sprite font file here instead of 'Score'.
 
 
