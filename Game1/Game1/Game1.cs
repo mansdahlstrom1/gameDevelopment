@@ -206,22 +206,22 @@ namespace Game1
             {
             }
             //Right
-            if (GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.X > 0 && ShipIsWithinLimits())//heroShipX < 800 - 40)
+            if (GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.X > 0 && ShipIsWithinLimits(heroShipX, heroShipY))//heroShipX < 800 - 40)
             {
                 heroShipX += (GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.X * speed);
             }
             //Left
-            if (GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.X < 0 && heroShipX > 0)
+            if (GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.X < 0 && ShipIsWithinLimits(heroShipX, heroShipY))
             {
                 heroShipX += (GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.X * speed);
             }
             //Up
-            if (GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.Y > 0 && heroShipY > 0)
+            if (GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.Y > 0 && ShipIsWithinLimits(heroShipX, heroShipY))
             {
                 heroShipY -= (GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.Y * speed);
             }
             //Down
-            if (GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.Y < 0 && heroShipY < 480 - 40)
+            if (GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.Y < 0 && ShipIsWithinLimits(heroShipX, heroShipY))
             {
                 heroShipY -= (GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.Y * speed);
             }
@@ -232,34 +232,35 @@ namespace Game1
                 System.Console.WriteLine("Right Stick pressed!");
             }
             //Right
-            if (GamePad.GetState(PlayerIndex.One).ThumbSticks.Right.X > 0 && ShipIsWithinLimits())
+            if (GamePad.GetState(PlayerIndex.One).ThumbSticks.Right.X > 0 && ShipIsWithinLimits(heroShipX, heroShipY))
             {
                 heroShipX += (GamePad.GetState(PlayerIndex.One).ThumbSticks.Right.X * speed);
             }
             //Left
-            if (GamePad.GetState(PlayerIndex.One).ThumbSticks.Right.X < 0 && ShipIsWithinLimits())
+            if (GamePad.GetState(PlayerIndex.One).ThumbSticks.Right.X < 0 && ShipIsWithinLimits(heroShipX, heroShipY))
             {
                 heroShipX += (GamePad.GetState(PlayerIndex.One).ThumbSticks.Right.X * speed);
             }
             //Up
-            if (GamePad.GetState(PlayerIndex.One).ThumbSticks.Right.Y > 0 && ShipIsWithinLimits())
+            if (GamePad.GetState(PlayerIndex.One).ThumbSticks.Right.Y > 0 && ShipIsWithinLimits(heroShipX, heroShipY))
             {
                 heroShipY -= (GamePad.GetState(PlayerIndex.One).ThumbSticks.Right.Y * speed);
             }
             //Down
-            if (GamePad.GetState(PlayerIndex.One).ThumbSticks.Right.Y < 0 && ShipIsWithinLimits())
+            if (GamePad.GetState(PlayerIndex.One).ThumbSticks.Right.Y < 0 && ShipIsWithinLimits(heroShipX, heroShipY))
             {
                 heroShipY -= (GamePad.GetState(PlayerIndex.One).ThumbSticks.Right.Y * speed);
             }
 
         }
-
-        private bool ShipIsWithinLimits()
+        // Here we can send in each players specific value!
+        private bool ShipIsWithinLimits(float playerX, float playerY)
         {
-            if(heroShipX >= 0 && heroShipX < (800 - 40) && heroShipY >= 0 && heroShipY < (480 -40))
+            if(playerX >= 0 && playerX < (800 - 40) && playerY >= 0 && playerY < (480 -40))
             {
                 return true;
-            }
+            } 
+
 
             return false;
         }
