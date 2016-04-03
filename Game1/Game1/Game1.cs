@@ -53,7 +53,7 @@ namespace Game1
 
             background = Content.Load<Texture2D>("stars");
 
-            shuttle = Content.Load<Texture2D>("shuttle");
+            shuttle = Content.Load<Texture2D>("images/EllenSpaceshipGreenPortrait");
 
             font = Content.Load<SpriteFont>("myFont"); // Use the name of your sprite font file here instead of 'Score'.
 
@@ -130,7 +130,7 @@ namespace Game1
 
             spriteBatch.Draw(background, new Rectangle(0, 0, 800, 480), Color.White);
             spriteBatch.Draw(shuttle, new Vector2(heroShipX, heroShipY), Color.White);
-            spriteBatch.DrawString(font, "Score: " + score, new Vector2(100, 100), Color.White);
+            spriteBatch.DrawString(font, "Score: " + score, new Vector2(10, 10), Color.White);
 
             spriteBatch.End();
 
