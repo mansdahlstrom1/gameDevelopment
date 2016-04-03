@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Collections.Generic;
 
 namespace Game1
 {
@@ -23,6 +24,7 @@ namespace Game1
         private float heroShipY = 0, heroShipX = 0;
         private float speed = 3;
         private string FPS;
+        private List<Player> players = new List<Player>();
 
         public Game1()
         {
@@ -41,7 +43,12 @@ namespace Game1
             // TODO: Add your initialization logic here
 
             //spaceship = new Spaceship();
-
+            foreach (Player p in players)
+            {
+                p.X = 250;
+                p.Y = 250;
+                p.Shuttle = Content.Load<Texture2D>("images/DogpoolPortrait");
+            }
             base.Initialize();
         }
 
