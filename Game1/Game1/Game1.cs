@@ -108,7 +108,7 @@ namespace Game1
 
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            spriteBatch.Begin();d
+            spriteBatch.Begin();
 
             spriteBatch.Draw(background, new Rectangle(0, 0, 800, 480), Color.White);
             spriteBatch.Draw(shuttle, new Vector2(heroShipX, heroShipY));
