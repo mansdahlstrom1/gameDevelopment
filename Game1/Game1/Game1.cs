@@ -16,13 +16,13 @@ namespace Game1
         SpriteBatch spriteBatch;
 
         //private Spaceship spaceship;
-        private Texture2D background;
+        
         private Texture2D shuttle;
         private SpriteFont font;
         private int score = 0;
         private float heroShipY = 0, heroShipX = 0;
         private float speed = 3;
-        private string FPS;
+        private Background myBackground;
 
         public Game1()
         {
@@ -54,7 +54,9 @@ namespace Game1
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            background = Content.Load<Texture2D>("stars");
+            myBackground = new Background();
+            Texture2D background = Content.Load<Texture2D>("stars");
+            myBackground.Load(GraphicsDevice, background);
 
             shuttle = Content.Load<Texture2D>("images/DogpoolPortrait");
             
@@ -80,6 +82,13 @@ namespace Game1
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+
+            // The time since Update was called last.
+            float elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            // TODO: Add your game logic here.
+            myBackground.Update(elapsed * 200);
+
             score++;
 
             CheckInput();
@@ -103,11 +112,11 @@ namespace Game1
 
             spriteBatch.Begin();
 
-            spriteBatch.Draw(background, new Rectangle(0, 0, 800, 480), Color.White);
+            myBackground.Draw(spriteBatch);
             spriteBatch.Draw(shuttle, new Vector2(heroShipX, heroShipY));
             spriteBatch.DrawString(font, "Score: " + score, new Vector2(10, 10), Color.White);
             spriteBatch.DrawString(font, "Speed: " + speed, new Vector2(10, 30), Color.White);
-            spriteBatch.DrawString(font, "FPS: " + "TODO", new Vector2(10, 50), Color.White);
+            spriteBatch.DrawString(font,"FPS: " +(1000 / gameTime.ElapsedGameTime.Milliseconds), new Vector2(10, 50), Color.White);
             spriteBatch.DrawString(font, "heroShip position X,Y: " + heroShipX + "," + heroShipY, new Vector2(10, 70), Color.White);
 
             spriteBatch.End();
@@ -115,7 +124,6 @@ namespace Game1
 
             // TODO: Add your drawing code here
 
-            Rectangle r = new Rectangle();
             
             base.Draw(gameTime);
         }
