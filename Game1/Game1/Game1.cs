@@ -23,8 +23,9 @@ namespace Game1
         private int score = 0;
         private float heroShipY = 0, heroShipX = 0;
         private float speed = 3;
-        private string FPS;
         private List<Player> players = new List<Player>();
+        private FrameCounter frameCounter = new FrameCounter();
+        private Texture2D spriteFont;
 
         public Game1()
         {
@@ -116,13 +117,22 @@ namespace Game1
 
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
+            
+
+
             spriteBatch.Begin();
+
+            //FPS counter                     
+            var deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            frameCounter.Update(deltaTime);
+            var fps = string.Format("FPS: {0}", frameCounter.AverageFramesPerSecond);
+            spriteBatch.DrawString(font, fps, new Vector2(10, 50), Color.White);
 
             myBackground.Draw(spriteBatch);
             spriteBatch.Draw(shuttle, new Vector2(heroShipX, heroShipY));
             spriteBatch.DrawString(font, "Score: " + score, new Vector2(10, 10), Color.White);
             spriteBatch.DrawString(font, "Speed: " + speed, new Vector2(10, 30), Color.White);
-            spriteBatch.DrawString(font, "FPS: " + (1000 / gameTime.ElapsedGameTime.Milliseconds), new Vector2(10, 50), Color.White);
+           // spriteBatch.DrawString(font, "FPS: " + (1000 / gameTime.ElapsedGameTime.Milliseconds), new Vector2(10, 50), Color.White);
             spriteBatch.DrawString(font, "heroShip position X,Y: " + heroShipX + "," + heroShipY, new Vector2(10, 70), Color.White);
 
             spriteBatch.End();
