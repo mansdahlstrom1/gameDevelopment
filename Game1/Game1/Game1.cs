@@ -109,6 +109,7 @@ namespace Game1
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            CheckInput();
 
             if (!paused)
             {
@@ -139,11 +140,10 @@ namespace Game1
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
-        {           
-
+        {
+            spriteBatch.Begin();
             if (gameState == GameState.Playing)
             {
-                spriteBatch.Begin();
 
                 myBackground.Draw(spriteBatch);
                 spriteBatch.Draw(shuttle, new Vector2(heroShipX, heroShipY));
@@ -157,7 +157,6 @@ namespace Game1
                 spriteBatch.DrawString(font, fps, new Vector2(10, 50), Color.White);
                 spriteBatch.DrawString(font, "heroShip position X,Y: " + heroShipX + "," + heroShipY, new Vector2(10, 70), Color.White);
 
-                spriteBatch.End();
             } else if (gameState == GameState.StartMenu){
                 // TODO
                 // Main Menu
@@ -172,6 +171,8 @@ namespace Game1
                 // Loading
 
             }
+
+            spriteBatch.End();
 
             base.Draw(gameTime);
         }
