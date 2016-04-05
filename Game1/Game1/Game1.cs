@@ -16,16 +16,18 @@ namespace Game1
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
-        //private Spaceship spaceship;
         private Background myBackground;
         private Texture2D shuttle;
         private SpriteFont font;
         private int score = 0;
-        private float heroShipY = 0, heroShipX = 0;
+
+
+
         private float speed = 3;
-        private List<Player> players = new List<Player>();
         private FrameCounter frameCounter = new FrameCounter();
         private Texture2D spriteFont;
+
+        private Ship ship;
 
         public Game1()
         {
@@ -43,13 +45,8 @@ namespace Game1
         {
             // TODO: Add your initialization logic here
 
-            //spaceship = new Spaceship();
-            foreach (Player p in players)
-            {
-                p.X = 250;
-                p.Y = 250;
-                p.Shuttle = Content.Load<Texture2D>("images/DogpoolPortrait");
-            }
+            ship = new Ship();
+
             base.Initialize();
         }
 
@@ -69,6 +66,9 @@ namespace Game1
             shuttle = Content.Load<Texture2D>("images/DogpoolPortrait");
             
             font = Content.Load<SpriteFont>("myFont"); // Use the name of your sprite font file here instead of 'Score'.
+
+
+            ship.Texture = shuttle;
 
 
             // TODO: use this.Content to load your game content here
@@ -98,8 +98,6 @@ namespace Game1
 
             score++;
 
-            CheckInput();
-
             if (score % 1000 == 1 && speed <= 12)
             {
                 speed += 3;
@@ -122,7 +120,7 @@ namespace Game1
      
 
             myBackground.Draw(spriteBatch);
-            spriteBatch.Draw(shuttle, new Vector2(heroShipX, heroShipY));
+
             spriteBatch.DrawString(font, "Score: " + score, new Vector2(10, 10), Color.White);
             spriteBatch.DrawString(font, "Speed: " + speed, new Vector2(10, 30), Color.White);
             // spriteBatch.DrawString(font, "FPS: " + (1000 / gameTime.ElapsedGameTime.Milliseconds), new Vector2(10, 50), Color.White);
@@ -131,7 +129,9 @@ namespace Game1
             frameCounter.Update(deltaTime);
             var fps = string.Format("FPS: {0}", frameCounter.AverageFramesPerSecond);
             spriteBatch.DrawString(font, fps, new Vector2(10, 50), Color.White);
-            spriteBatch.DrawString(font, "heroShip position X,Y: " + heroShipX + "," + heroShipY, new Vector2(10, 70), Color.White);
+            spriteBatch.DrawString(font, "Ship position x,y: " + ship.X + "," + ship.Y, new Vector2(10, 70), Color.White);
+
+            spriteBatch.Draw(ship.Texture, new Vector2(ship.X, ship.Y));
 
             spriteBatch.End();
 
@@ -142,138 +142,6 @@ namespace Game1
         }
 
 
-        private void CheckInput()
-        {
-
-            //System.Console.WriteLine(Keyboard.GetState().GetPressedKeys());
-            //
-            //System.Console.WriteLine("Keyboard.GetState().GetPressedKeys() Loop");
-            //foreach (var key in Keyboard.GetState().GetPressedKeys())
-            //{
-            //    System.Console.WriteLine(key.GetType() + " <Type - key>" + key);
-            //}
-
-            //W, A, S, D
-            if (Keyboard.GetState().IsKeyDown(Keys.W) && heroShipY > 0)
-            {
-                heroShipY = heroShipY - 1 * speed;
-            }
-            if (Keyboard.GetState().IsKeyDown(Keys.S) && heroShipY < 480 - 40)
-            {
-                heroShipY = heroShipY + (1 * speed);
-            }
-            if (Keyboard.GetState().IsKeyDown(Keys.A) && heroShipX > 0)
-            {
-                heroShipX = heroShipX - 1 * speed;
-            }
-            if (Keyboard.GetState().IsKeyDown(Keys.D) && heroShipX < 800 - 40)
-            {
-                heroShipX = heroShipX + 1 * speed;
-            }
-
-            //A, B, X, Y
-            if (GamePad.GetState(PlayerIndex.One).Buttons.A == ButtonState.Pressed)
-            {
-                System.Console.WriteLine("A");
-            }
-            if (GamePad.GetState(PlayerIndex.One).Buttons.B == ButtonState.Pressed)
-            {
-                System.Console.WriteLine("B");
-            }
-            if (GamePad.GetState(PlayerIndex.One).Buttons.X == ButtonState.Pressed)
-            {
-                System.Console.WriteLine("X");
-            }
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Y == ButtonState.Pressed)
-            {
-                System.Console.WriteLine("Y");
-            }
-
-            //Shoulders & Triggers
-            if (GamePad.GetState(PlayerIndex.One).Buttons.RightShoulder == ButtonState.Pressed)
-            {
-                System.Console.WriteLine("Right Shoulder");
-            }
-            if (GamePad.GetState(PlayerIndex.One).Buttons.LeftShoulder == ButtonState.Pressed)
-            {
-                System.Console.WriteLine("Left Shoulder");
-            }
-            if(GamePad.GetState(PlayerIndex.One).Triggers.Right > 0)
-            {
-                System.Console.WriteLine("Right Trigger: " + GamePad.GetState(PlayerIndex.One).Triggers.Right);
-            }
-            if (GamePad.GetState(PlayerIndex.One).Triggers.Left > 0)
-            {
-                System.Console.WriteLine("Left Trigger: " + GamePad.GetState(PlayerIndex.One).Triggers.Left);
-            }
-            //TODO Triggerz man!
-
-            //Start, back and big button
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Start == ButtonState.Pressed)
-            {
-            }
-            if (GamePad.GetState(PlayerIndex.One).Buttons.BigButton == ButtonState.Pressed)
-            {
-                //Funkar inte :(
-                System.Console.WriteLine("Big Button!");
-            }
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-            {
-                Exit();
-            }
-
-            //Left Stick
-            if (GamePad.GetState(PlayerIndex.One).Buttons.LeftStick == ButtonState.Pressed)
-            {
-            }
-            //Right
-            if (GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.X > 0 && ShipIsWithinLimits(heroShipX, heroShipY))//heroShipX < 800 - 40)
-            {
-                heroShipX += (GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.X * speed);
-            }
-            //Left
-            if (GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.X < 0 && ShipIsWithinLimits(heroShipX, heroShipY))
-            {
-                heroShipX += (GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.X * speed);
-            }
-            //Up
-            if (GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.Y > 0 && ShipIsWithinLimits(heroShipX, heroShipY))
-            {
-                heroShipY -= (GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.Y * speed);
-            }
-            //Down
-            if (GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.Y < 0 && ShipIsWithinLimits(heroShipX, heroShipY))
-            {
-                heroShipY -= (GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.Y * speed);
-            }
-
-            //Right Stick
-            if (GamePad.GetState(PlayerIndex.One).Buttons.RightStick == ButtonState.Pressed)
-            {
-                System.Console.WriteLine("Right Stick pressed!");
-            }
-            //Right
-            if (GamePad.GetState(PlayerIndex.One).ThumbSticks.Right.X > 0 && ShipIsWithinLimits(heroShipX, heroShipY))
-            {
-                heroShipX += (GamePad.GetState(PlayerIndex.One).ThumbSticks.Right.X * speed);
-            }
-            //Left
-            if (GamePad.GetState(PlayerIndex.One).ThumbSticks.Right.X < 0 && ShipIsWithinLimits(heroShipX, heroShipY))
-            {
-                heroShipX += (GamePad.GetState(PlayerIndex.One).ThumbSticks.Right.X * speed);
-            }
-            //Up
-            if (GamePad.GetState(PlayerIndex.One).ThumbSticks.Right.Y > 0 && ShipIsWithinLimits(heroShipX, heroShipY))
-            {
-                heroShipY -= (GamePad.GetState(PlayerIndex.One).ThumbSticks.Right.Y * speed);
-            }
-            //Down
-            if (GamePad.GetState(PlayerIndex.One).ThumbSticks.Right.Y < 0 && ShipIsWithinLimits(heroShipX, heroShipY))
-            {
-                heroShipY -= (GamePad.GetState(PlayerIndex.One).ThumbSticks.Right.Y * speed);
-            }
-
-        }
         // Here we can send in each players specific value!
         private bool ShipIsWithinLimits(float playerX, float playerY)
         {
