@@ -13,6 +13,14 @@ namespace Game1
     /// 
     public class Game1 : Game
     {
+
+        enum GameState
+        {
+            StartMenu,
+            Loading,
+            Playing,
+            Paused
+        }
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
@@ -20,12 +28,19 @@ namespace Game1
         private Background myBackground;
         private Texture2D shuttle;
         private SpriteFont font;
+        private Texture2D startButton;
+        private Texture2D exitButton;
+        private Texture2D pauseButton;
+        private Texture2D resumeButton;
+        private Texture2D loadingScreen;
         private int score = 0;
         private float heroShipY = 0, heroShipX = 0;
         private float speed = 3;
         private List<Player> players = new List<Player>();
         private FrameCounter frameCounter = new FrameCounter();
         private Texture2D spriteFont;
+       
+        private GameState gameState;
 
         bool paused = false;
 
@@ -45,7 +60,7 @@ namespace Game1
         {
             // TODO: Add your initialization logic here
             paused = false;
-
+            CheckInput();
             //spaceship = new Spaceship();
             foreach (Player p in players)
             {
@@ -53,6 +68,7 @@ namespace Game1
                 p.Y = 250;
                 p.Shuttle = Content.Load<Texture2D>("images/DogpoolPortrait");
             }
+            gameState = GameState.Playing;
             base.Initialize();
         }
 
@@ -93,7 +109,6 @@ namespace Game1
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            CheckInput();
 
             if (!paused)
             {
@@ -124,30 +139,39 @@ namespace Game1
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
-        {
+        {           
 
-            GraphicsDevice.Clear(Color.CornflowerBlue);
-           
-            spriteBatch.Begin();
+            if (gameState == GameState.Playing)
+            {
+                spriteBatch.Begin();
 
-     
+                myBackground.Draw(spriteBatch);
+                spriteBatch.Draw(shuttle, new Vector2(heroShipX, heroShipY));
+                spriteBatch.DrawString(font, "Score: " + score, new Vector2(10, 10), Color.White);
+                spriteBatch.DrawString(font, "Speed: " + speed, new Vector2(10, 30), Color.White);
+                // spriteBatch.DrawString(font, "FPS: " + (1000 / gameTime.ElapsedGameTime.Milliseconds), new Vector2(10, 50), Color.White);
+                //FPS counter                     
+                var deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+                frameCounter.Update(deltaTime);
+                var fps = string.Format("FPS: {0}", frameCounter.AverageFramesPerSecond);
+                spriteBatch.DrawString(font, fps, new Vector2(10, 50), Color.White);
+                spriteBatch.DrawString(font, "heroShip position X,Y: " + heroShipX + "," + heroShipY, new Vector2(10, 70), Color.White);
 
-            myBackground.Draw(spriteBatch);
-            spriteBatch.Draw(shuttle, new Vector2(heroShipX, heroShipY));
-            spriteBatch.DrawString(font, "Score: " + score, new Vector2(10, 10), Color.White);
-            spriteBatch.DrawString(font, "Speed: " + speed, new Vector2(10, 30), Color.White);
-            // spriteBatch.DrawString(font, "FPS: " + (1000 / gameTime.ElapsedGameTime.Milliseconds), new Vector2(10, 50), Color.White);
-            //FPS counter                     
-            var deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
-            frameCounter.Update(deltaTime);
-            var fps = string.Format("FPS: {0}", frameCounter.AverageFramesPerSecond);
-            spriteBatch.DrawString(font, fps, new Vector2(10, 50), Color.White);
-            spriteBatch.DrawString(font, "heroShip position X,Y: " + heroShipX + "," + heroShipY, new Vector2(10, 70), Color.White);
+                spriteBatch.End();
+            } else if (gameState == GameState.StartMenu){
+                // TODO
+                // Main Menu
+                
+            } else if(gameState == GameState.Paused) {
+                // TODO
+                // Paused
 
-            spriteBatch.End();
+            }
+            else if (gameState == GameState.Loading) {
+                // TODO
+                // Loading
 
-
-            // TODO: Add your drawing code here
+            }
 
             base.Draw(gameTime);
         }
@@ -179,10 +203,15 @@ namespace Game1
             //Esc
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
             {
-                if (!paused)
-                    Pause();
-                else if (paused)
-                    Unpause();
+                if (gameState == GameState.Playing)
+                {
+                    gameState = GameState.Paused;
+                }
+                else if(gameState == GameState.Paused)
+                {
+                    gameState = GameState.Playing;
+                }
+           
             }
 
 

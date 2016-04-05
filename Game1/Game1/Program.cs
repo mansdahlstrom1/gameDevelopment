@@ -15,11 +15,12 @@ namespace Game1
         static void Main()
         {
 
-
-
+            Connect con = new Connect();
+            con.RunSQLStatement("Show Tables");
+            
             using (var game = new Game1())
-                game.Run();
-
+               game.Run();
+            
             
         }
     }
