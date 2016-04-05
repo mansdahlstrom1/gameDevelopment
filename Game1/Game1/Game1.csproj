@@ -70,7 +70,6 @@
     <Compile Include="Button.cs" />
     <Compile Include="Connect.cs" />
     <Compile Include="FrameCounter.cs" />
-    <Compile Include="GameObject.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="InputHelper.cs" />
     <Compile Include="Player.cs" />
@@ -81,6 +80,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="Ship.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
