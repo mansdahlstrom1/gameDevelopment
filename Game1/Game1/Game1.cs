@@ -26,6 +26,8 @@ namespace Game1
         private FrameCounter frameCounter = new FrameCounter();
         private Texture2D spriteFont;
 
+        InputHelper inputHelper;
+
         private Ship ship;
 
         public Game1()
@@ -44,6 +46,7 @@ namespace Game1
         {
             // TODO: Add your initialization logic here
 
+            inputHelper = new InputHelper();
             ship = new Ship();
 
             base.Initialize();
@@ -97,7 +100,7 @@ namespace Game1
 
             score++;
 
-            CheckInput();
+            inputHelper.CheckInput(Keyboard.GetState(), GamePad.GetState(PlayerIndex.One), ship);
 
             if (score % 1000 == 1 && speed <= 12)
             {

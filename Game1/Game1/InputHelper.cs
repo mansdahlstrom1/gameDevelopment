@@ -10,7 +10,7 @@ namespace Game1
 {
     class InputHelper
     {
-        public void CheckInput(KeyboardState keyboardState, GamePadState gpStateOne)
+        public void CheckInput(KeyboardState keyboardState, GamePadState gpStateOne, Ship ship)
         {
 
             //System.Console.WriteLine(Keyboard.GetState().GetPressedKeys());
@@ -24,20 +24,31 @@ namespace Game1
             //W, A, S, D
             if (Keyboard.GetState().IsKeyDown(Keys.W))
             {
-                
+                ship.Y++;
             }
             if (Keyboard.GetState().IsKeyDown(Keys.S))
             {
-                
+                ship.Y--;
             }
             if (Keyboard.GetState().IsKeyDown(Keys.A))
             {
-                
+                ship.X--;
             }
             if (Keyboard.GetState().IsKeyDown(Keys.D) )
             {
-              
+                ship.X++;
             }
+
+            //Space
+
+            if (Keyboard.GetState().IsKeyDown(Keys.Space))
+            {
+                ship.FireMain();
+            }
+
+            //
+            //Controller Input
+            //
 
             //A, B, X, Y
             if (GamePad.GetState(PlayerIndex.One).Buttons.A == ButtonState.Pressed)
