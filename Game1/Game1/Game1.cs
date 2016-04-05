@@ -16,13 +16,12 @@ namespace Game1
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
+        //private Spaceship spaceship;
         private Background myBackground;
         private Texture2D shuttle;
         private SpriteFont font;
         private int score = 0;
-
-
-
+        private float heroShipY = 0, heroShipX = 0;
         private float speed = 3;
         private FrameCounter frameCounter = new FrameCounter();
         private Texture2D spriteFont;
@@ -97,6 +96,8 @@ namespace Game1
             myBackground.Update(elapsed * 200);
 
             score++;
+
+            CheckInput();
 
             if (score % 1000 == 1 && speed <= 12)
             {
