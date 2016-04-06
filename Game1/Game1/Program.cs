@@ -16,7 +16,7 @@ namespace Game1
         {
 
             Connect con = new Connect();
-            con.RunSQLStatement("Show Tables");
+            con.RunSQLStatement("select * from user where username = ?", "dahlan1337");
             
             using (var game = new Game1())
                game.Run();

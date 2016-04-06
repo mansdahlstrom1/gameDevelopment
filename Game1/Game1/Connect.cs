@@ -34,14 +34,31 @@ namespace Game1
             }
         }
 
-        public void RunSQLStatement(String sql)
+        public void RunSQLStatement(String sql, String param1 = null, String param2 = null, String param3 = null)
         {
-            MySqlCommand cmd = new MySqlCommand(sql, conn);
-            MySqlDataReader rdr = cmd.ExecuteReader();
+            MySqlCommand cmd;
+            MySqlDataReader rdr;
 
-            while (rdr.Read())
+            if (param1 != null && param2 == null && param3 == null)
             {
-                Console.WriteLine(rdr[0]);
+               
+                // 1 input parameter are avaliable
+            } else if (param1 != null && param2 != null && param3 == null)
+            {
+             
+                // 2 input parameters are avaliable
+            } else if (param1 != null && param2 != null && param3 != null)
+            {
+
+                // 3 input parameters are avaibable
+            } else
+            {
+                cmd = new MySqlCommand(sql, conn);
+                rdr = cmd.ExecuteReader();
+                while (rdr.Read())
+                {
+                    Console.WriteLine(rdr[0]);
+                }
             }
         }
     }

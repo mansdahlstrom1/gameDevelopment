@@ -25,7 +25,8 @@ namespace Game1
         SpriteBatch spriteBatch;
 
         //private Spaceship spaceship;
-        private Background myBackground;
+        private Background gameBackground;
+        private Background menuBackground;
         private Texture2D shuttle;
         private SpriteFont font;
         private Texture2D startButton;
@@ -81,9 +82,14 @@ namespace Game1
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            myBackground = new Background();
-            Texture2D background = Content.Load<Texture2D>("stars");
-            myBackground.Load(GraphicsDevice, background);
+            gameBackground = new Background();
+            menuBackground = new Background();
+
+            Texture2D gameBackgroundImage = Content.Load<Texture2D>("stars");
+            Texture2D menuBackgroundImage = Content.Load<Texture2D>("images/whiteBG");
+
+            gameBackground.Load(GraphicsDevice, gameBackgroundImage);
+            menuBackground.Load(GraphicsDevice, menuBackgroundImage);
 
             shuttle = Content.Load<Texture2D>("images/DogpoolPortrait");
 
@@ -111,13 +117,13 @@ namespace Game1
         {
             CheckInput();
 
-            if (!paused)
+            if (gameState == GameState.Playing)
             {
                 // The time since Update was called last.
                 float elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
                 // TODO: Add your game logic here.
-                myBackground.Update(elapsed * 200);
+                gameBackground.Update(elapsed * 200);
 
                 score++;
 
@@ -145,7 +151,7 @@ namespace Game1
             if (gameState == GameState.Playing)
             {
 
-                myBackground.Draw(spriteBatch);
+                gameBackground.Draw(spriteBatch);
                 spriteBatch.Draw(shuttle, new Vector2(heroShipX, heroShipY));
                 spriteBatch.DrawString(font, "Score: " + score, new Vector2(10, 10), Color.White);
                 spriteBatch.DrawString(font, "Speed: " + speed, new Vector2(10, 30), Color.White);
@@ -160,10 +166,13 @@ namespace Game1
             } else if (gameState == GameState.StartMenu){
                 // TODO
                 // Main Menu
+
+                
                 
             } else if(gameState == GameState.Paused) {
                 // TODO
                 // Paused
+                menuBackground.Draw(spriteBatch);
 
             }
             else if (gameState == GameState.Loading) {
