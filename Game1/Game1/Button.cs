@@ -43,7 +43,7 @@ namespace Game1
 
             if (mouseRec.Intersects(rec))
             {
-                if (mouse.LeftButton == ButtonState.Pressed()) isClicked = true;
+                if (mouse.LeftButton == ButtonState.Pressed) isClicked = true;
             } else
             {
                 isClicked = false;
