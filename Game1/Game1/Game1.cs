@@ -40,23 +40,26 @@ namespace Game1
         private List<Player> players = new List<Player>();
         private float speed = 10;
         private FrameCounter frameCounter = new FrameCounter();
+        private float speed = 10.0f;
 
         private GameState gameState;
         private InputHelper inputHelper = new InputHelper();
         private CheckCollisions checkCollisions = new CheckCollisions();
 
-        private Ship ship, ship2; //List<Ship> activeShips = new List<Ship>();
+        private List<Ship> activeShips = new List<Ship>();
         private List<Missile> missilesToRemove = new List<Missile>();
         private Missile missileToRemove;
-
-
-        //Test
-        bool ship2IsHit = false;
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+
+            /* Changes window size
+            graphics.PreferredBackBufferWidth = 1200;
+            graphics.PreferredBackBufferHeight = 900;
+            graphics.ApplyChanges();
+            */
         }
 
         /// <summary>
@@ -79,10 +82,11 @@ namespace Game1
             }
             gameState = GameState.Playing;
 
-            //activeShips.Add(new Ship(50, 50);
-            //activeShips.Add(new Ship(300, 100);
-            ship = new Ship(50, 50);
-            ship2 = new Ship(300, 100);
+            //Check how many players are active and what controllers are connected and stuff
+            activeShips.Add(new Ship(50, 50, true, true, 0));
+            activeShips.Add(new Ship(300, 100, false, true, 1));
+            //activeShips.Add(new Ship(300, 100, false, true, 2));
+            //activeShips.Add(new Ship(300, 100, false, true, 3));
 
             base.Initialize();
         }
@@ -106,14 +110,16 @@ namespace Game1
             menuBackground.Load(GraphicsDevice, menuBackgroundImage);
 
             shuttle = Content.Load<Texture2D>("images/DogpoolPortrait");
-            
-            font = Content.Load<SpriteFont>("myFont"); // Use the name of your sprite font file here instead of 'Score'.
 
-            //foreach ...
-            missileTexture = Content.Load<Texture2D>("images/laser_small");
-            ship.MissileTexture = missileTexture;
-            ship.Texture = shipTexture;
-            ship2.Texture = shipTexture;
+            //Pontus {
+            activeShips[0].Texture = Content.Load<Texture2D>("images/PontusSpacesaucerPinkPortrait");
+            activeShips[1].Texture = Content.Load<Texture2D>("images/DogpoolPortrait");
+
+            foreach (Ship s in activeShips)
+            {
+                s.MissileTexture = Content.Load<Texture2D>("images/laser_small");
+            }
+            //Pontus }
 
 
             // TODO: use this.Content to load your game content here
@@ -148,7 +154,7 @@ namespace Game1
             score++;
 
             //Pontus {
-            /*
+            /* Collision detection, todo...
             foreach (Missile m in ship.Missiles)
             {
                 if (m.Texture.Bounds.Intersects(ship2.Texture.Bounds))
@@ -159,25 +165,13 @@ namespace Game1
                 }
             }
             */
+            foreach (Ship s in activeShips)
+            {
+                MoveShip(s);
+            }
             
-
-            //foreach (Ship s in activeShips){
-                foreach (Missile m in ship.Missiles) //{
-                    m.Move(speed * 2);
-                //}
-
-                //missileToRemove = missilesToRemove.First
-                //
-                //
-            //}
-
-            
-
-            inputHelper.CheckController(GamePad.GetState(PlayerIndex.One, GamePadDeadZone.Circular), ship, speed);
-            inputHelper.CheckKeyboard(Keyboard.GetState(), ship, speed);
-            inputHelper.CheckKeyboard(Keyboard.GetState(), ship2, speed / 2);
             //Pontus }
- 
+
 
             base.Update(gameTime);
 
@@ -191,16 +185,8 @@ namespace Game1
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            
-
-            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
-            {
-                Exit();
-            }
-
-
             GraphicsDevice.Clear(Color.CornflowerBlue);
-           
+
             spriteBatch.Begin();
             if (gameState == GameState.Playing)
             {
@@ -227,18 +213,26 @@ namespace Game1
                 // Paused
                 menuBackground.Draw(spriteBatch);
 
+            //Pontus {
+            foreach (Ship s in activeShips)
+            {
+                spriteBatch.DrawString(font, "Ship[" + s.ControllerIndex + "] position x,y: " + s.XPos + "," + s.YPos, new Vector2(10, 70), Color.White);
+                spriteBatch.Draw(s.Texture, new Vector2(s.XPos, s.YPos), null, null, null, 0.0f, new Vector2(0.4f));
             }
             else if (gameState == GameState.Loading) {
                 // TODO
                 // Loading
 
-            if (!ship2IsHit)
-                spriteBatch.Draw(ship2.Texture, new Vector2(300, 100), null, null, null, 0.0f, new Vector2(0.4f));
+                foreach (Missile m in s.Missiles)
+                {
+                    spriteBatch.Draw(m.Texture, new Vector2(m.XPos, m.YPos), null, null, null, 0, new Vector2(0.6f));
+                }
+            }
 
+            //checkCollisions.CheckCollision();
 
-            foreach (Missile m in ship.Missiles)
             {
-                spriteBatch.Draw(m.Texture, new Vector2(m.XPos, m.YPos), null, null, null, 0, new Vector2(0.6f));
+                System.Console.WriteLine("Collision!");
             }
             //Pontus }
 
@@ -250,6 +244,46 @@ namespace Game1
             base.Draw(gameTime);
         }
 
+        private void MoveShip(Ship s)
+        {
+            //If ship has controller then check controller input
+            if (s.HasController)
+            {
+                s.Move(GamePad.GetState(s.ControllerIndex, GamePadDeadZone.Circular), speed);
+            }
+            //If ship has keyboard then check controller input
+            if (s.HasKeyboard)
+            {
+                s.Move(Keyboard.GetState(), speed);
+            }
+
+            //Move missiles
+            foreach (Missile m in s.Missiles)
+            {
+                if (m.YPos > 0)
+                {
+                    m.Move(speed * 2);
+                }
+                else
+                {
+                    missilesToRemove.Add(m);
+                }
+            }
+
+            //Remove missiles
+            if (missilesToRemove.Count != 0)
+            {
+                missileToRemove = missilesToRemove[0];
+
+                if (missileToRemove != null)
+                {
+                    s.RemoveMissile(missileToRemove);
+                    missilesToRemove.Remove(missileToRemove);
+                    missileToRemove = null;
+                }
+            }
+        }
+
         // Here we can send in each players specific value!
         // Not done, don't use
         private bool ShipIsWithinLimits(float playerX, float playerY)
@@ -257,7 +291,7 @@ namespace Game1
             if (playerX >= 0 && playerX < (800 - 40) && playerY >= 0 && playerY < (480 - 40))
             {
                 return true;
-            } 
+            }
             return false;
         }
     }
