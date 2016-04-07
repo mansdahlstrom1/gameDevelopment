@@ -19,12 +19,14 @@ namespace Game1
         //private Spaceship spaceship;
         private Background myBackground;
         private Texture2D shuttle;
+        private Texture2D missileTexture;
         private SpriteFont font;
         private int score = 0;
-        private float heroShipY = 0, heroShipX = 0;
         private float speed = 3;
         private FrameCounter frameCounter = new FrameCounter();
         private Texture2D spriteFont;
+
+        private float shipRotation = 0.0f;
 
         InputHelper inputHelper;
 
@@ -47,7 +49,7 @@ namespace Game1
             // TODO: Add your initialization logic here
 
             inputHelper = new InputHelper();
-            ship = new Ship();
+            ship = new Ship(50, 50);
 
             base.Initialize();
         }
@@ -62,14 +64,16 @@ namespace Game1
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             myBackground = new Background();
-            Texture2D background = Content.Load<Texture2D>("stars");
+            Texture2D background = Content.Load<Texture2D>("images/stars");
             myBackground.Load(GraphicsDevice, background);
 
             shuttle = Content.Load<Texture2D>("images/DogpoolPortrait");
             
             font = Content.Load<SpriteFont>("myFont"); // Use the name of your sprite font file here instead of 'Score'.
 
+            missileTexture = Content.Load<Texture2D>("images/laser_small");
 
+            ship.MissileTexture = missileTexture;
             ship.Texture = shuttle;
 
 
@@ -98,9 +102,12 @@ namespace Game1
             // TODO: Add your game logic here.
             myBackground.Update(elapsed * 200);
 
+            
+
             score++;
 
-            inputHelper.CheckInput(Keyboard.GetState(), GamePad.GetState(PlayerIndex.One), ship);
+            inputHelper.CheckController(GamePad.GetState(PlayerIndex.One, GamePadDeadZone.Circular), ship);
+            inputHelper.CheckKeyboard(Keyboard.GetState(), ship);
 
             if (score % 1000 == 1 && speed <= 12)
             {
@@ -116,6 +123,13 @@ namespace Game1
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
+            
+
+            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
+            {
+                Exit();
+            }
+
 
             GraphicsDevice.Clear(Color.CornflowerBlue);
            
@@ -133,9 +147,14 @@ namespace Game1
             frameCounter.Update(deltaTime);
             var fps = string.Format("FPS: {0}", frameCounter.AverageFramesPerSecond);
             spriteBatch.DrawString(font, fps, new Vector2(10, 50), Color.White);
-            spriteBatch.DrawString(font, "Ship position x,y: " + ship.X + "," + ship.Y, new Vector2(10, 70), Color.White);
+            spriteBatch.DrawString(font, "Ship position x,y: " + ship.XPos + "," + ship.YPos, new Vector2(10, 70), Color.White);
 
-            spriteBatch.Draw(ship.Texture, new Vector2(ship.X, ship.Y));
+            spriteBatch.Draw(ship.Texture, new Vector2(ship.XPos, ship.YPos), null, null, null, shipRotation, null);
+
+            foreach(Missile m in ship.Missiles){
+                spriteBatch.Draw(m.Texture, new Vector2(m.XPos, m.YPos));
+                m.Move();
+            }
 
             spriteBatch.End();
 

@@ -10,27 +10,32 @@ namespace Game1
     //abstract
     class Ship
     {
-        private float x;
-        private float y;
+        private float xPos;
+        private float yPos;
         private Texture2D texture;
         //private Sprite sprite;
         //private float width;
         //private float height;
 
+        private Texture2D missileTexture;
+        public Texture2D MissileTexture { get { return missileTexture; } set { missileTexture = value; } }
+        private List<Missile> missiles = new List<Missile>();
+        public List<Missile> Missiles { get { return missiles; } }
+
         public Texture2D Texture { get { return texture; } set { texture = value; } }
-        public float X { get { return x; } set { x = value; } }
-        public float Y { get { return y; } set { y = value; } }
+        public float XPos { get { return xPos; } set { xPos = value; } }
+        public float YPos { get { return yPos; } set { yPos = value; } }
         //public Sprite Sprite { get { return sprite; } set { sprite = value; } }
         //public float width { get { return width; } set { width = value; } }
         //public float height { get { return height; } set { height = value; } }
 
         //Default constructor
-        public Ship()
+        public Ship(float xPos, float yPos)
         {
-            X = 10;
-            Y = 10;
+            XPos = xPos;
+            YPos = yPos;
         }
-        
+
         /*
         public Ship(Sprite sprite)
         {
@@ -40,15 +45,23 @@ namespace Game1
         }
         */
 
-
         public void Move(float x, float y)
         {
-
+            XPos += x;
+            YPos += y;
         }
-        
+
+        public void ResetPosition()
+        {
+            XPos = 10;
+            YPos = 10;
+        }
+
         public void FireMain()
         {
-            System.Console.WriteLine("Pew pew");
+            missiles.Add(new Missile(XPos + 5, YPos, missileTexture));
+            missiles.Add(new Missile(XPos + 110, YPos, missileTexture));
+            //System.Console.WriteLine("Pew pew");
         }
 
         public void FireSecondary()
