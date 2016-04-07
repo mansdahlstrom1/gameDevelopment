@@ -14,9 +14,7 @@ namespace Game1
         KeyboardState oldKeyboardState;
         GamePadState oldGamePadState;
 
-        int speed = 10;
-
-        public void CheckController(GamePadState newGamePadState, Ship ship)
+        public void CheckController(GamePadState newGamePadState, Ship ship, float speed)
         {
             //A, B, X, Y
             if (newGamePadState.Buttons.A == ButtonState.Pressed && oldGamePadState.Buttons.A == ButtonState.Released)
@@ -159,7 +157,7 @@ namespace Game1
             oldGamePadState = newGamePadState;
         }
 
-        public void CheckKeyboard(KeyboardState newKeyboardState, Ship ship)
+        public void CheckKeyboard(KeyboardState newKeyboardState, Ship ship, float speed)
         {
             //W, A, S, D
             //if (Keyboard.GetState().IsKeyDown(Keys.W))
@@ -180,6 +178,23 @@ namespace Game1
                 ship.Move(speed, 0);
             }
 
+            //Arrow keys
+            if (newKeyboardState.IsKeyDown(Keys.Up))//&& !oldState.IsKeyDown(Keys.W))
+            {
+                ship.Move(0, speed * -1);
+            }
+            if (newKeyboardState.IsKeyDown(Keys.Down))//&& !oldState.IsKeyDown(Keys.S))
+            {
+                ship.Move(0, speed);
+            }
+            if (newKeyboardState.IsKeyDown(Keys.Left))//&& !oldState.IsKeyDown(Keys.A))
+            {
+                ship.Move(speed * -1, 0);
+            }
+            if (newKeyboardState.IsKeyDown(Keys.Right))//&& !oldState.IsKeyDown(Keys.D))
+            {
+                ship.Move(speed, 0);
+            }
 
             //Space, Escape
 
