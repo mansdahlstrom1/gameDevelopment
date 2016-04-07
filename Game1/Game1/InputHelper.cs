@@ -95,7 +95,7 @@ namespace Game1
             //Left
             if (newGamePadState.ThumbSticks.Left.X < 0)
             {
-                ship.Move(newGamePadState.ThumbSticks.Left.X * speed, 0);
+                ship.Move((newGamePadState.ThumbSticks.Left.X * speed), 0);
             }
             //Right
             if (newGamePadState.ThumbSticks.Left.X > 0)
