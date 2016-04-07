@@ -69,6 +69,7 @@
     <Compile Include="Background.cs" />
     <Compile Include="Button.cs" />
     <Compile Include="Connect.cs" />
+    <Compile Include="CheckCollisions.cs" />
     <Compile Include="FrameCounter.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="InputHelper.cs" />

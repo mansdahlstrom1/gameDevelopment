@@ -59,9 +59,24 @@ namespace Game1
 
         public void FireMain()
         {
-            missiles.Add(new Missile(XPos + 5, YPos, missileTexture));
-            missiles.Add(new Missile(XPos + 110, YPos, missileTexture));
-            //System.Console.WriteLine("Pew pew");
+            missiles.Add(new Missile(XPos - 5, YPos, missileTexture));
+            missiles.Add(new Missile(XPos + 40, YPos, missileTexture));
+
+            System.Console.WriteLine("Ships missile count: " + Missiles.Count);
+        }
+
+        public void RemoveMissile(Missile m)
+        {
+            try
+            {
+                missiles.Remove(m);
+                System.Console.WriteLine("RemoveMissile() removed a missile from ship");
+            }
+            catch (Exception e)
+            {
+                System.Console.WriteLine("RemoveMissile() failed");
+                //System.Console.WriteLine(e.Message);
+            }
         }
 
         public void FireSecondary()

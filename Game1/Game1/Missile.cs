@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Game1
@@ -16,27 +17,22 @@ namespace Game1
 
         private Texture2D texture;
         public Texture2D Texture { get { return texture; } set { texture = value; } }
-
-        private bool isAlive;
-        public bool IsAlive { get { return isAlive; } set { isAlive = value; } }
         
         //Default
         public Missile()
         {
-
         }
 
         public Missile(float xPos, float yPos, Texture2D texture)
         {
-            IsAlive = true;
             Texture = texture;
             XPos = xPos;
             YPos = yPos;
         }
 
-        public void Move()
+        public void Move(float speed)
         {
-            YPos -= 20;
+            YPos -= speed;
         }
     }
 }
