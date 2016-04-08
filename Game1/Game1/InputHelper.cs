@@ -162,6 +162,9 @@ namespace Game1
         {
             if (newKeyboardState.IsKeyDown(Keys.Escape) && !oldKeyboardState.IsKeyDown(Keys.Escape))
             {
+                Console.WriteLine("ESC");
+                oldKeyboardState = newKeyboardState;
+
                 if (gameState == Game1.GameState.Playing)
                 {
                     System.Console.WriteLine("Paus!");
@@ -174,7 +177,6 @@ namespace Game1
                 }
             }
 
-            oldKeyboardState = newKeyboardState;
         }
 
         public void CheckKeyboardForShip(KeyboardState newKeyboardState, Ship ship, float speed)
@@ -223,11 +225,6 @@ namespace Game1
                 System.Console.WriteLine("Pew?");
                 ship.FireMain();
             }
-            if (newKeyboardState.IsKeyDown(Keys.Escape) && !oldKeyboardState.IsKeyDown(Keys.Escape))
-            {
-                //Exit(); // Eller paus eller ngt, vi får se
-            }
-
             oldKeyboardState = newKeyboardState;
         }
     }
