@@ -11,6 +11,7 @@ namespace Game1
     //abstract
     class Ship
     {
+        //private Point position;
         private float xPos;
         private float yPos;
         public float XPos { get { return xPos; } set { xPos = value; } }

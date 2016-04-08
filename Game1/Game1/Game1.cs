@@ -29,11 +29,6 @@ namespace Game1
         private Background menuBackground;
         private Texture2D shuttle;
         private SpriteFont font;
-        private Texture2D startButton;
-        private Texture2D exitButton;
-        private Texture2D pauseButton;
-        private Texture2D resumeButton;
-        private Texture2D loadingScreen;
         private int score = 0;
         private float speed = 10;
         private FrameCounter frameCounter = new FrameCounter();
@@ -132,6 +127,9 @@ namespace Game1
 
             if (gameState == GameState.Playing)
             {
+
+                CollisionCheck();
+
                 // The time since Update was called last.
                 float elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
                 //This makes the background scroll
@@ -185,7 +183,10 @@ namespace Game1
                     spriteBatch.Draw(s.Texture, new Vector2(s.XPos, s.YPos), null, null, null, 0.0f, new Vector2(0.4f));
                     foreach (Missile m in s.Missiles)
                     {
-                        spriteBatch.Draw(m.Texture, new Vector2(m.XPos, m.YPos), null, null, null, 0, new Vector2(0.6f));
+                        if (CollisionCheck())
+                        {
+                            spriteBatch.Draw(m.Texture, new Vector2(m.XPos, m.YPos), null, null, null, 0, new Vector2(0.6f));
+                        }
                     }
                 }
             }
@@ -220,6 +221,17 @@ namespace Game1
             // TODO: Add your drawing code here
 
             base.Draw(gameTime);
+        }
+
+        //Test
+        private void CollisionCheck()
+        {
+            Rectangle rect1 = new Rectangle(new Point((int)activeShips[0].XPos, (int)activeShips[0].YPos), new Point(50));
+            Rectangle rect2 = new Rectangle(new Point((int)activeShips[1].XPos, (int)activeShips[1].YPos), new Point(50));
+            if (rect1.Intersects(rect2))
+            {
+                //Collision
+            }
         }
 
         // Here we can send in each players specific value!
