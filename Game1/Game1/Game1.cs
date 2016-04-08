@@ -204,7 +204,7 @@ namespace Game1
                     {
                         System.Environment.Exit(1);
                     }
-                }
+                    }
             }
             CheckInput(activeShips);
 
@@ -254,9 +254,9 @@ namespace Game1
                     {
                         //if (CollisionCheck())
                         //{
-                            spriteBatch.Draw(m.Texture, new Vector2(m.XPos, m.YPos), null, null, null, 0, new Vector2(0.6f));
+                        spriteBatch.Draw(m.Texture, new Vector2(m.XPos, m.YPos), null, null, null, 0, new Vector2(0.6f));
                         //}
-                    }
+            }
             //}
             //else
             if (gameState == GameState.StartMenu)
@@ -285,25 +285,28 @@ namespace Game1
                 // TODO
                 // Loading
 
-
+               
             }
 
 
             spriteBatch.End();
 
 
-            // TODO: Add your drawing code here
+                // TODO: Add your drawing code here
 
             base.Draw(gameTime);
         }
+        private void CheckInput(List<Ship> activeShips)
+        {
+            inputHelper.CheckKeyboard(Keyboard.GetState(), ref gameState);
 
         //Test
         private void CollisionCheck()
-        {
+            {
             Rectangle rect1 = new Rectangle(new Point((int)activeShips[0].XPos, (int)activeShips[0].YPos), new Point(50));
             Rectangle rect2 = new Rectangle(new Point((int)activeShips[1].XPos, (int)activeShips[1].YPos), new Point(50));
             if (rect1.Intersects(rect2))
-            {
+                {
                 //Collision
             }
         }
