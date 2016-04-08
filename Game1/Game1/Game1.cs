@@ -43,8 +43,7 @@ namespace Game1
         private CheckCollisions checkCollisions = new CheckCollisions();
 
         private List<Ship> activeShips = new List<Ship>();
-        private List<Missile> missilesToRemove = new List<Missile>();
-        private Missile missileToRemove;
+        private List<GamePadState> activeControllerStates = new List<GamePadState>();
 
         public Game1()
         {
@@ -129,17 +128,34 @@ namespace Game1
         {
             // TODO: Add your game logic here.
 
+
+
             if (gameState == GameState.Playing)
             {
                 // The time since Update was called last.
                 float elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
                 //This makes the background scroll
                 gameBackground.Update(elapsed * 200);
-                    
-                score += ((int)speed/2);
+
+                score += ((int)speed / 2);
             }
 
-            CheckInput(activeShips);
+
+            if (gameState == GameState.Playing)
+            {
+                foreach (Ship s in activeShips)
+                {
+                    //Add the state of active controllers to a list to be sent to input helper
+                    activeControllerStates.Add(GamePad.GetState(s.ControllerIndex, GamePadDeadZone.Circular));
+                    //Move and remove missiles
+                    s.ReMoveMissiles(speed);
+                }
+
+                inputHelper.CheckGameInput(activeShips, activeControllerStates, Keyboard.GetState(), speed);
+                activeControllerStates.Clear();
+            }
+
+            inputHelper.CheckMenuKeyboard(Keyboard.GetState(), ref gameState);
 
             base.Update(gameTime);
         }
@@ -150,8 +166,6 @@ namespace Game1
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            //GraphicsDevice.Clear(Color.CornflowerBlue);
-
             spriteBatch.Begin();
 
             if (gameState == GameState.Playing)
@@ -190,8 +204,6 @@ namespace Game1
                 // Paused
                 menuBackground.Draw(spriteBatch);
 
-                //Pontus {
-
             }
             else if (gameState == GameState.Loading)
             {
@@ -208,58 +220,6 @@ namespace Game1
             // TODO: Add your drawing code here
 
             base.Draw(gameTime);
-        }
-        private void CheckInput(List<Ship> activeShips)
-        {
-            inputHelper.CheckKeyboard(Keyboard.GetState(), ref gameState);
-
-            if (gameState == GameState.Playing)
-            {
-                foreach (Ship s in activeShips)
-                {
-                    //If ship has controller then check controller input
-                    if (s.HasController)
-                    {
-                        inputHelper.CheckController(GamePad.GetState(s.ControllerIndex, GamePadDeadZone.Circular), s, speed);
-                    }
-                    //If ship has keyboard then check controller input
-                    if (s.HasKeyboard)
-                    {
-                        inputHelper.CheckKeyboardForShip(Keyboard.GetState(), s, speed);
-                    }
-
-                    MoveMissiles(s);
-                }
-
-            }
-        }
-
-        private void MoveMissiles(Ship s)
-        {
-            foreach (Missile m in s.Missiles)
-            {
-                if (m.YPos > 0)
-                {
-                    m.Move(speed * 2);
-                }
-                else
-                {
-                    missilesToRemove.Add(m);
-                }
-            }
-
-            //Remove missiles
-            if (missilesToRemove.Count != 0)
-            {
-                missileToRemove = missilesToRemove[0];
-
-                if (missileToRemove != null)
-                {
-                    s.RemoveMissile(missileToRemove);
-                    missilesToRemove.Remove(missileToRemove);
-                    missileToRemove = null;
-                }
-            }
         }
 
         // Here we can send in each players specific value!
