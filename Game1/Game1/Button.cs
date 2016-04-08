@@ -3,7 +3,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,14 +13,15 @@ namespace Game1
     {
         private Texture2D texture;
         private Vector2 position;
-        private Microsoft.Xna.Framework.Rectangle rec;
+        private Rectangle rec;
         private String text;
-        Microsoft.Xna.Framework.Color color = new Microsoft.Xna.Framework.Color(255, 255, 255, 255);
+        private int[] margins;
+        Color color = new Color(255, 255, 255, 255);
         Utils utils = new Utils();
 
         public Vector2 size;
 
-        public Button (Texture2D newTexture, GraphicsDevice graphicsDevice, String newText)
+        public Button (Texture2D newTexture, GraphicsDevice graphicsDevice, String newText, SpriteFont font)
         {
             text = newText;
             texture = newTexture;
@@ -30,7 +30,8 @@ namespace Game1
             // Width 800    height = 460:
             // button 100   height = 23;
             size = new Vector2(graphicsDevice.Viewport.Width / 8, graphicsDevice.Viewport.Height / 20);
-           
+
+            margins = utils.centerText(font, text);
 
         }
 
@@ -40,10 +41,10 @@ namespace Game1
         // Not sure if we this, turtorials man...
         public Boolean Update(MouseState mouse)
         {
-            rec = new Microsoft.Xna.Framework.Rectangle((int)position.X, (int)position.Y,
+            rec = new Rectangle((int)position.X, (int)position.Y,
                 (int)size.X, (int)size.Y);
 
-            Microsoft.Xna.Framework.Rectangle mouseRec = new Microsoft.Xna.Framework.Rectangle(mouse.X, mouse.Y, 1, 1);
+            Rectangle mouseRec = new Rectangle(mouse.X, mouse.Y, 1, 1);
             isClicked = false;
             if (mouseRec.Intersects(rec))
             {
@@ -66,10 +67,10 @@ namespace Game1
         }
 
         public void Draw(SpriteBatch spriteBatch, SpriteFont font)
-        {   
-            System.Drawing
+        {
+            // System.Drawing
             spriteBatch.Draw(texture, rec, color);
-            spriteBatch.DrawString(font, text, new Vector2(position.X + 10, position.Y + 5), Microsoft.Xna.Framework.Color.White);
+            spriteBatch.DrawString(font, text, new Vector2(position.X + margins[0], position.Y + margins[1]), Color.White);
         }
     }
 }

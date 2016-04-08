@@ -29,21 +29,20 @@ namespace Game1
         private Background menuBackground;
         private Texture2D shuttle;
         private SpriteFont font;
-        private Texture2D startButton;
-        private Texture2D exitButton;
-        private Texture2D pauseButton;
-        private Texture2D resumeButton;
-        private Texture2D loadingScreen;
-        private Button btn1;
+
+        private Button btnPauseResume;
+        private Button btnPauseMainMenu;
+        private Button btnStartMenuPlay;
+        private Button btnStartMenuOptions;
+        private Button btnStartMenuExit;
+
         private int score = 0;
         private float speed = 10;
         private FrameCounter frameCounter = new FrameCounter();
 
-
         private GameState gameState;
         private InputHelper inputHelper = new InputHelper();
         private CheckCollisions checkCollisions = new CheckCollisions();
-
 
         private List<Ship> activeShips = new List<Ship>();
         private List<Missile> missilesToRemove = new List<Missile>();
@@ -99,15 +98,29 @@ namespace Game1
             gameBackground.Load(GraphicsDevice, gameBackgroundImage);
             menuBackground.Load(GraphicsDevice, menuBackgroundImage);
 
-            Texture2D TextureBtn1 = Content.Load<Texture2D>("images/button");
-            btn1 = new Button(TextureBtn1, GraphicsDevice, "Play Game");
-            btn1.setPosition(new Vector2(350, 200));
-
-
-            shuttle = Content.Load<Texture2D>("images/DogpoolPortrait");
+            shuttle = Content.Load<Texture2D>("images/DogpoolPortrait"); 
             font = Content.Load<SpriteFont>("myFont");
             activeShips[0].Texture = Content.Load<Texture2D>("images/PontusSpacesaucerPinkPortrait");
             activeShips[1].Texture = Content.Load<Texture2D>("images/DogpoolPortrait");
+
+
+            //Buttons
+            Texture2D TextureBtn = Content.Load<Texture2D>("images/button");
+            btnPauseResume = new Button(TextureBtn, GraphicsDevice, "Resume", font);
+            btnPauseResume.setPosition(new Vector2(350, 160));
+
+            btnPauseMainMenu = new Button(TextureBtn, GraphicsDevice, "Main Menu", font);
+            btnPauseMainMenu.setPosition(new Vector2(350, 200));
+
+            btnStartMenuPlay = new Button(TextureBtn, GraphicsDevice, "Play", font);
+            btnStartMenuPlay.setPosition(new Vector2(350, 160));
+
+            btnStartMenuOptions = new Button(TextureBtn, GraphicsDevice, "Options", font);
+            btnStartMenuOptions.setPosition(new Vector2(350, 200));
+
+            btnStartMenuExit = new Button(TextureBtn, GraphicsDevice, "Exit", font);
+            btnStartMenuExit.setPosition(new Vector2(350, 240));
+
 
             foreach (Ship s in activeShips)
             {
@@ -135,7 +148,7 @@ namespace Game1
         protected override void Update(GameTime gameTime)
         {
             // TODO: Add your game logic here.
-
+            MouseState mouseState = Mouse.GetState();
             if (gameState == GameState.Playing)
             {
                 // The time since Update was called last.
@@ -150,13 +163,42 @@ namespace Game1
             {
                 IsMouseVisible = true;
 
-                if (btn1.Update(Mouse.GetState()))
+                if (btnPauseResume.Update(mouseState))
                 {
                     if (gameState == GameState.Paused)
                     {
                         gameState = GameState.Playing;
 
                     }
+                }
+               else  if (btnPauseMainMenu.Update(mouseState))
+                {
+                    if (gameState == GameState.Paused)
+                    {
+                        gameState = GameState.StartMenu;
+                    }
+                }
+            }
+            else if(gameState == GameState.StartMenu)
+            {
+                IsMouseVisible = true;
+                if (btnStartMenuPlay.Update(mouseState))
+                {
+                    // What happend is Play is pressed
+                    if (gameState == GameState.StartMenu)
+                    {
+                        gameState = GameState.Playing;
+                    }
+                }
+                else if (btnStartMenuOptions.Update(mouseState))
+                {
+                    // What happend is Options is pressed
+
+                }
+                else if (btnStartMenuExit.Update(mouseState))
+                {
+                    // What happend is Exit is pressed
+
                 }
             }
             CheckInput(activeShips);
@@ -201,6 +243,10 @@ namespace Game1
             {
                 // TODO
                 // Main Menu
+                menuBackground.Draw(spriteBatch);
+                btnStartMenuPlay.Draw(spriteBatch, font);
+                btnStartMenuOptions.Draw(spriteBatch, font);
+                btnStartMenuExit.Draw(spriteBatch, font);
 
 
 
@@ -210,7 +256,8 @@ namespace Game1
                 // TODO
                 // Paused
                 //menuBackground.Draw(spriteBatch);
-                btn1.Draw(spriteBatch, font);
+                btnPauseResume.Draw(spriteBatch, font);
+                btnPauseMainMenu.Draw(spriteBatch, font);
 
             }
             else if (gameState == GameState.Loading)
