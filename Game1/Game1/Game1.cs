@@ -36,11 +36,8 @@ namespace Game1
         private Texture2D resumeButton;
         private Texture2D loadingScreen;
         private int score = 0;
-        private float speed = 3;
-        private List<Player> players = new List<Player>();
         private float speed = 10;
         private FrameCounter frameCounter = new FrameCounter();
-        private float speed = 10.0f;
 
         private GameState gameState;
         private InputHelper inputHelper = new InputHelper();
@@ -71,15 +68,7 @@ namespace Game1
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            paused = false;
-            CheckInput();
-            //spaceship = new Spaceship();
-            foreach (Player p in players)
-            {
-                p.X = 250;
-                p.Y = 250;
-                p.Shuttle = Content.Load<Texture2D>("images/DogpoolPortrait");
-            }
+
             gameState = GameState.Playing;
 
             //Check how many players are active and what controllers are connected and stuff
@@ -103,15 +92,14 @@ namespace Game1
             gameBackground = new Background();
             menuBackground = new Background();
 
-            Texture2D gameBackgroundImage = Content.Load<Texture2D>("stars");
+            Texture2D gameBackgroundImage = Content.Load<Texture2D>("images/stars");
             Texture2D menuBackgroundImage = Content.Load<Texture2D>("images/whiteBG");
 
             gameBackground.Load(GraphicsDevice, gameBackgroundImage);
             menuBackground.Load(GraphicsDevice, menuBackgroundImage);
 
             shuttle = Content.Load<Texture2D>("images/DogpoolPortrait");
-
-            //Pontus {
+            font = Content.Load<SpriteFont>("myFont");
             activeShips[0].Texture = Content.Load<Texture2D>("images/PontusSpacesaucerPinkPortrait");
             activeShips[1].Texture = Content.Load<Texture2D>("images/DogpoolPortrait");
 
@@ -119,7 +107,6 @@ namespace Game1
             {
                 s.MissileTexture = Content.Load<Texture2D>("images/laser_small");
             }
-            //Pontus }
 
 
             // TODO: use this.Content to load your game content here
@@ -141,41 +128,37 @@ namespace Game1
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            CheckInput();
 
             if (gameState == GameState.Playing)
             {
-            // The time since Update was called last.
-            float elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
+                // The time since Update was called last.
+                float elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            // TODO: Add your game logic here.
+                // TODO: Add your game logic here.
                 gameBackground.Update(elapsed * 200);
 
-            score++;
+                score++;
 
-            //Pontus {
-            /* Collision detection, todo...
-            foreach (Missile m in ship.Missiles)
-            {
-                if (m.Texture.Bounds.Intersects(ship2.Texture.Bounds))
+                //Pontus {
+                /* Collision detection, todo...
+                foreach (Missile m in ship.Missiles)
                 {
-                    //ship2IsHit = true;
-                    System.Console.WriteLine("Collision between missile and ship2");
-                    missilesToRemove.Add(m);
+                    if (m.Texture.Bounds.Intersects(ship2.Texture.Bounds))
+                    {
+                        //ship2IsHit = true;
+                        System.Console.WriteLine("Collision between missile and ship2");
+                        missilesToRemove.Add(m);
+                    }
+                }
+                */
+                foreach (Ship s in activeShips)
+                {
+                    MoveShip(s);
                 }
             }
-            */
-            foreach (Ship s in activeShips)
-            {
-                MoveShip(s);
-            }
-            
-            //Pontus }
-
 
             base.Update(gameTime);
 
-        }
 
         }
 
@@ -186,61 +169,61 @@ namespace Game1
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-
             spriteBatch.Begin();
             if (gameState == GameState.Playing)
             {
 
                 gameBackground.Draw(spriteBatch);
-                spriteBatch.Draw(shuttle, new Vector2(heroShipX, heroShipY));
-            spriteBatch.DrawString(font, "Score: " + score, new Vector2(10, 10), Color.White);
-            spriteBatch.DrawString(font, "Speed: " + speed, new Vector2(10, 30), Color.White);
+                spriteBatch.DrawString(font, "Score: " + score, new Vector2(10, 10), Color.White);
+                spriteBatch.DrawString(font, "Speed: " + speed, new Vector2(10, 30), Color.White);
 
-            var deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
-            frameCounter.Update(deltaTime);
-            var fps = string.Format("FPS: {0}", frameCounter.AverageFramesPerSecond);
-            spriteBatch.DrawString(font, fps, new Vector2(10, 50), Color.White);
-                spriteBatch.DrawString(font, "heroShip position X,Y: " + heroShipX + "," + heroShipY, new Vector2(10, 70), Color.White);
+                var deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+                frameCounter.Update(deltaTime);
+                var fps = string.Format("FPS: {0}", frameCounter.AverageFramesPerSecond);
+                spriteBatch.DrawString(font, fps, new Vector2(10, 50), Color.White);
 
-            } else if (gameState == GameState.StartMenu){
+
+                foreach (Ship s in activeShips)
+                {
+                    spriteBatch.DrawString(font, "Ship[" + s.ControllerIndex + "] position x,y: " + s.XPos + "," + s.YPos, new Vector2(10, (70 + s.ControllerIndex * 20)), Color.White);
+                    spriteBatch.Draw(s.Texture, new Vector2(s.XPos, s.YPos), null, null, null, 0.0f, new Vector2(0.4f));
+                    foreach (Missile m in s.Missiles)
+                    {
+                        spriteBatch.Draw(m.Texture, new Vector2(m.XPos, m.YPos), null, null, null, 0, new Vector2(0.6f));
+                    }
+                }
+            }
+            else if (gameState == GameState.StartMenu)
+            {
                 // TODO
                 // Main Menu
 
-                
-                
-            } else if(gameState == GameState.Paused) {
+
+
+            }
+            else if (gameState == GameState.Paused)
+            {
                 // TODO
                 // Paused
                 menuBackground.Draw(spriteBatch);
 
-            //Pontus {
-            foreach (Ship s in activeShips)
-            {
-                spriteBatch.DrawString(font, "Ship[" + s.ControllerIndex + "] position x,y: " + s.XPos + "," + s.YPos, new Vector2(10, 70), Color.White);
-                spriteBatch.Draw(s.Texture, new Vector2(s.XPos, s.YPos), null, null, null, 0.0f, new Vector2(0.4f));
+                //Pontus {
+
             }
-            else if (gameState == GameState.Loading) {
+            else if (gameState == GameState.Loading)
+            {
                 // TODO
                 // Loading
 
-                foreach (Missile m in s.Missiles)
-                {
-                    spriteBatch.Draw(m.Texture, new Vector2(m.XPos, m.YPos), null, null, null, 0, new Vector2(0.6f));
-                }
+               
             }
 
-            //checkCollisions.CheckCollision();
-
-            {
-                System.Console.WriteLine("Collision!");
-            }
-            //Pontus }
 
             spriteBatch.End();
 
 
-            // TODO: Add your drawing code here
-            
+                // TODO: Add your drawing code here
+
             base.Draw(gameTime);
         }
 

@@ -72,6 +72,7 @@
     <Compile Include="CheckCollisions.cs" />
     <Compile Include="Coin.cs" />
     <Compile Include="FrameCounter.cs" />
+    <Compile Include="Game1.cs" />
     <Compile Include="InputHelper.cs" />
     <Compile Include="Missile.cs" />
     <Compile Include="Program.cs" />
