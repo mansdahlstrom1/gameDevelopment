@@ -45,8 +45,7 @@ namespace Game1
         private CheckCollisions checkCollisions = new CheckCollisions();
 
         private List<Ship> activeShips = new List<Ship>();
-        private List<Missile> missilesToRemove = new List<Missile>();
-        private Missile missileToRemove;
+        private List<GamePadState> activeControllerStates = new List<GamePadState>();
 
         public Game1()
         {
@@ -156,7 +155,7 @@ namespace Game1
                 //This makes the background scroll
                 gameBackground.Update(elapsed * 200);
                 IsMouseVisible = false;
-
+                    
                 score += ((int)speed / 2);
             }
             else if (gameState == GameState.Paused)
@@ -189,7 +188,7 @@ namespace Game1
                     {
                         gameState = GameState.Playing;
                     }
-                }
+            }
                 else if (btnStartMenuOptions.Update(mouseState))
                 {
                     // What happend is Options is pressed
@@ -206,6 +205,21 @@ namespace Game1
             }
             CheckInput(activeShips);
 
+            if (gameState == GameState.Playing)
+            {
+                foreach (Ship s in activeShips)
+                {
+                    //Add the state of active controllers to a list to be sent to input helper
+                    activeControllerStates.Add(GamePad.GetState(s.ControllerIndex, GamePadDeadZone.Circular));
+                    //Move and remove missiles
+                    s.ReMoveMissiles(speed);
+                }
+
+                inputHelper.CheckGameInput(activeShips, activeControllerStates, Keyboard.GetState(), speed);
+                activeControllerStates.Clear();
+            }
+
+            inputHelper.CheckMenuKeyboard(Keyboard.GetState(), ref gameState);
 
             base.Update(gameTime);
         }
@@ -216,30 +230,28 @@ namespace Game1
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            //GraphicsDevice.Clear(Color.CornflowerBlue);
-
             spriteBatch.Begin();
 
             //if (gameState == GameState.Playing)
             //{
-            gameBackground.Draw(spriteBatch);
-            spriteBatch.DrawString(font, "Score: " + score, new Vector2(10, 10), Color.White);
-            spriteBatch.DrawString(font, "Speed: " + speed, new Vector2(10, 30), Color.White);
+                gameBackground.Draw(spriteBatch);
+                spriteBatch.DrawString(font, "Score: " + score, new Vector2(10, 10), Color.White);
+                spriteBatch.DrawString(font, "Speed: " + speed, new Vector2(10, 30), Color.White);
 
-            var deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
-            frameCounter.Update(deltaTime);
-            var fps = string.Format("FPS: {0}", frameCounter.AverageFramesPerSecond);
-            spriteBatch.DrawString(font, fps, new Vector2(10, 50), Color.White);
+                var deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+                frameCounter.Update(deltaTime);
+                var fps = string.Format("FPS: {0}", frameCounter.AverageFramesPerSecond);
+                spriteBatch.DrawString(font, fps, new Vector2(10, 50), Color.White);
 
-            foreach (Ship s in activeShips)
-            {
-                spriteBatch.DrawString(font, "Ship[" + s.ControllerIndex + "] position x,y: " + s.XPos + "," + s.YPos, new Vector2(10, (70 + s.ControllerIndex * 20)), Color.White);
-                spriteBatch.Draw(s.Texture, new Vector2(s.XPos, s.YPos), null, null, null, 0.0f, new Vector2(0.4f));
-                foreach (Missile m in s.Missiles)
+                foreach (Ship s in activeShips)
                 {
-                    spriteBatch.Draw(m.Texture, new Vector2(m.XPos, m.YPos), null, null, null, 0, new Vector2(0.6f));
+                    spriteBatch.DrawString(font, "Ship[" + s.ControllerIndex + "] position x,y: " + s.XPos + "," + s.YPos, new Vector2(10, (70 + s.ControllerIndex * 20)), Color.White);
+                    spriteBatch.Draw(s.Texture, new Vector2(s.XPos, s.YPos), null, null, null, 0.0f, new Vector2(0.4f));
+                    foreach (Missile m in s.Missiles)
+                    {
+                        spriteBatch.Draw(m.Texture, new Vector2(m.XPos, m.YPos), null, null, null, 0, new Vector2(0.6f));
+                    }
                 }
-            } 
             //}
             //else
             if (gameState == GameState.StartMenu)
@@ -278,58 +290,6 @@ namespace Game1
             // TODO: Add your drawing code here
 
             base.Draw(gameTime);
-        }
-        private void CheckInput(List<Ship> activeShips)
-        {
-            inputHelper.CheckKeyboard(Keyboard.GetState(), ref gameState);
-
-            if (gameState == GameState.Playing)
-            {
-                foreach (Ship s in activeShips)
-                {
-                    //If ship has controller then check controller input
-                    if (s.HasController)
-                    {
-                        inputHelper.CheckController(GamePad.GetState(s.ControllerIndex, GamePadDeadZone.Circular), s, speed);
-                    }
-                    //If ship has keyboard then check controller input
-                    if (s.HasKeyboard)
-                    {
-                        inputHelper.CheckKeyboardForShip(Keyboard.GetState(), s, speed);
-                    }
-
-                    MoveMissiles(s);
-                }
-
-            }
-        }
-
-        private void MoveMissiles(Ship s)
-        {
-            foreach (Missile m in s.Missiles)
-            {
-                if (m.YPos > 0)
-                {
-                    m.Move(speed * 2);
-                }
-                else
-                {
-                    missilesToRemove.Add(m);
-                }
-            }
-
-            //Remove missiles
-            if (missilesToRemove.Count != 0)
-            {
-                missileToRemove = missilesToRemove[0];
-
-                if (missileToRemove != null)
-                {
-                    s.RemoveMissile(missileToRemove);
-                    missilesToRemove.Remove(missileToRemove);
-                    missileToRemove = null;
-                }
-            }
         }
 
         // Here we can send in each players specific value!

@@ -10,39 +10,56 @@ namespace Game1
 {
     class InputHelper
     {
+        GamePadState[] oldGamePadStates = { new GamePadState(), new GamePadState(), new GamePadState(), new GamePadState() };
+        KeyboardState oldGameKeyboardState;
 
-        KeyboardState oldKeyboardState;
-        GamePadState oldGamePadState;
+        public void CheckGameInput(List<Ship> activeShips, List<GamePadState> newGamePadStates, KeyboardState newGameKeyBoardState, float speed)
+        {
+            foreach (Ship s in activeShips)
+            {
+                if (s.HasController)
+                {
+                    CheckController(newGamePadStates[s.ControllerIndex], oldGamePadStates[s.ControllerIndex],  s, speed);
+                    oldGamePadStates[s.ControllerIndex] = newGamePadStates[s.ControllerIndex];
+                }
+                //If ship has keyboard then check controller input
+                if (s.HasKeyboard)
+                {
+                    CheckKeyboard(newGameKeyBoardState, oldGameKeyboardState, s, speed);
+                    oldGameKeyboardState = newGameKeyBoardState;
+                }
+            }
+        }
 
-        public void CheckController(GamePadState newGamePadState, Ship ship, float speed)
+        private void CheckController(GamePadState newGamePadState, GamePadState oldGamePadState, Ship ship, float speed)
         {
             //A, B, X, Y
             if (newGamePadState.Buttons.A == ButtonState.Pressed && oldGamePadState.Buttons.A == ButtonState.Released)
             {
-                System.Console.WriteLine("A");
+                System.Console.WriteLine("A test");
             }
             if (newGamePadState.Buttons.B == ButtonState.Pressed && oldGamePadState.Buttons.B == ButtonState.Released)
             {
-                System.Console.WriteLine("B");
+                
             }
             if (newGamePadState.Buttons.X == ButtonState.Pressed && oldGamePadState.Buttons.X == ButtonState.Released)
             {
-                System.Console.WriteLine("X");
+                
             }
             if (newGamePadState.Buttons.Y == ButtonState.Pressed && oldGamePadState.Buttons.Y == ButtonState.Released)
             {
-                System.Console.WriteLine("Y");
+                
             }
 
 
             //Shoulders
             if (newGamePadState.Buttons.RightShoulder == ButtonState.Pressed && oldGamePadState.Buttons.RightShoulder == ButtonState.Released)
             {
-                System.Console.WriteLine("Right Shoulder");
+                ship.FireMain();
             }
             if (newGamePadState.Buttons.LeftShoulder == ButtonState.Pressed && oldGamePadState.Buttons.LeftShoulder == ButtonState.Released)
             {
-                System.Console.WriteLine("Left Shoulder");
+
             }
 
 
@@ -50,7 +67,7 @@ namespace Game1
             //if (newGamePadState.Triggers.Right != 0 && oldGamePadState.Triggers.Right == 0)
             if (newGamePadState.Triggers.Right == 1 && oldGamePadState.Triggers.Right != 1)
             {
-                ship.FireMain();
+
             }
             if (newGamePadState.Triggers.Left == 1 && oldGamePadState.Triggers.Left != 1)
             {
@@ -61,18 +78,15 @@ namespace Game1
             //Start, back and big button
             if (newGamePadState.Buttons.Start == ButtonState.Pressed && oldGamePadState.Buttons.Start == ButtonState.Released)
             {
-                System.Console.WriteLine("Start");
                 ship.ResetPosition();
             }
             if (newGamePadState.Buttons.BigButton == ButtonState.Pressed && oldGamePadState.Buttons.BigButton == ButtonState.Released)
             {
                 //Funkar inte :(
-                System.Console.WriteLine("Big Button!");
             }
             if (newGamePadState.Buttons.Back == ButtonState.Pressed && oldGamePadState.Buttons.Back == ButtonState.Released)
             {
-                System.Console.WriteLine("Back");
-                //Exit();
+
             }
 
 
@@ -80,7 +94,7 @@ namespace Game1
             //Press
             if (newGamePadState.Buttons.LeftStick == ButtonState.Pressed && oldGamePadState.Buttons.LeftStick == ButtonState.Released)
             {
-                System.Console.WriteLine("Left Stick pressed!");
+
             }
             //Up
             if (newGamePadState.ThumbSticks.Left.Y > 0)
@@ -107,21 +121,22 @@ namespace Game1
             //Right Stick
             if (newGamePadState.Buttons.RightStick == ButtonState.Pressed)
             {
-                System.Console.WriteLine("Right Stick pressed!");
+
             }
             //Up
             if (newGamePadState.ThumbSticks.Right.Y > 0)
             {
-                //Does nothing
+
             }
             //Down
             if (newGamePadState.ThumbSticks.Right.Y < 0)
             {
-                //Does nothing
+                
             }
             //Left
             if (newGamePadState.ThumbSticks.Right.X < 0)
             {
+
             }
             //Right
             if (newGamePadState.ThumbSticks.Right.X > 0)
@@ -133,15 +148,12 @@ namespace Game1
             //Up
             if (newGamePadState.DPad.Up == ButtonState.Pressed && oldGamePadState.DPad.Up == ButtonState.Released)
             {
-                System.Console.WriteLine("Speed: " + ++speed);
+
             }
             //Down
             if (newGamePadState.DPad.Down == ButtonState.Pressed && oldGamePadState.DPad.Down == ButtonState.Released)
             {
-                if (speed > 0)
-                {
-                    System.Console.WriteLine("Speed: " + --speed);
-                }
+
             }
             //Left
             if (newGamePadState.DPad.Left == ButtonState.Pressed && oldGamePadState.DPad.Left == ButtonState.Released)
@@ -153,18 +165,14 @@ namespace Game1
             {
 
             }
-
-            oldGamePadState = newGamePadState;
         }
 
-
-        public void CheckKeyboard(KeyboardState newKeyboardState, ref Game1.GameState gameState)
+        KeyboardState oldKeyboardState;
+        public void CheckMenuKeyboard(KeyboardState newKeyboardState, ref Game1.GameState gameState)
         {
             if (newKeyboardState.IsKeyDown(Keys.Escape) && !oldKeyboardState.IsKeyDown(Keys.Escape))
             {
-                Console.WriteLine("ESC");
-                oldKeyboardState = newKeyboardState;
-
+                System.Console.WriteLine("Escape!");
                 if (gameState == Game1.GameState.Playing)
                 {
                     System.Console.WriteLine("Paus!");
@@ -179,7 +187,8 @@ namespace Game1
 
         }
 
-        public void CheckKeyboardForShip(KeyboardState newKeyboardState, Ship ship, float speed)
+
+        private void CheckKeyboard(KeyboardState newKeyboardState, KeyboardState oldKeyboardState, Ship ship, float speed)
         {
             //W, A, S, D
             //if (Keyboard.GetState().IsKeyDown(Keys.W))
@@ -222,7 +231,6 @@ namespace Game1
 
             if (newKeyboardState.IsKeyDown(Keys.Space) && !oldKeyboardState.IsKeyDown(Keys.Space))
             {
-                System.Console.WriteLine("Pew?");
                 ship.FireMain();
             }
             oldKeyboardState = newKeyboardState;
