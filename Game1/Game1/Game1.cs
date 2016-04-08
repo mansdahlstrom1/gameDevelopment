@@ -14,7 +14,7 @@ namespace Game1
     public class Game1 : Game
     {
 
-        enum GameState
+        public enum GameState
         {
             StartMenu,
             Loading,
@@ -28,7 +28,6 @@ namespace Game1
         private Background gameBackground;
         private Background menuBackground;
         private Texture2D shuttle;
-        private Texture2D missileTexture;
         private SpriteFont font;
         private Texture2D startButton;
         private Texture2D exitButton;
@@ -128,38 +127,21 @@ namespace Game1
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            // TODO: Add your game logic here.
 
             if (gameState == GameState.Playing)
             {
                 // The time since Update was called last.
                 float elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-                // TODO: Add your game logic here.
+                //This makes the background scroll
                 gameBackground.Update(elapsed * 200);
-
-                score++;
-
-                //Pontus {
-                /* Collision detection, todo...
-                foreach (Missile m in ship.Missiles)
-                {
-                    if (m.Texture.Bounds.Intersects(ship2.Texture.Bounds))
-                    {
-                        //ship2IsHit = true;
-                        System.Console.WriteLine("Collision between missile and ship2");
-                        missilesToRemove.Add(m);
-                    }
-                }
-                */
-                foreach (Ship s in activeShips)
-                {
-                    MoveShip(s);
-                }
+                    
+                score += ((int)speed/2);
             }
 
+            CheckInput(activeShips);
+
             base.Update(gameTime);
-
-
         }
 
         /// <summary>
@@ -168,11 +150,12 @@ namespace Game1
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            //GraphicsDevice.Clear(Color.CornflowerBlue);
+
             spriteBatch.Begin();
+
             if (gameState == GameState.Playing)
             {
-
                 gameBackground.Draw(spriteBatch);
                 spriteBatch.DrawString(font, "Score: " + score, new Vector2(10, 10), Color.White);
                 spriteBatch.DrawString(font, "Speed: " + speed, new Vector2(10, 30), Color.White);
@@ -181,7 +164,6 @@ namespace Game1
                 frameCounter.Update(deltaTime);
                 var fps = string.Format("FPS: {0}", frameCounter.AverageFramesPerSecond);
                 spriteBatch.DrawString(font, fps, new Vector2(10, 50), Color.White);
-
 
                 foreach (Ship s in activeShips)
                 {
@@ -193,6 +175,7 @@ namespace Game1
                     }
                 }
             }
+
             else if (gameState == GameState.StartMenu)
             {
                 // TODO
@@ -215,32 +198,44 @@ namespace Game1
                 // TODO
                 // Loading
 
-               
+
             }
 
 
             spriteBatch.End();
 
 
-                // TODO: Add your drawing code here
+            // TODO: Add your drawing code here
 
             base.Draw(gameTime);
         }
-
-        private void MoveShip(Ship s)
+        private void CheckInput(List<Ship> activeShips)
         {
-            //If ship has controller then check controller input
-            if (s.HasController)
-            {
-                s.Move(GamePad.GetState(s.ControllerIndex, GamePadDeadZone.Circular), speed);
-            }
-            //If ship has keyboard then check controller input
-            if (s.HasKeyboard)
-            {
-                s.Move(Keyboard.GetState(), speed);
-            }
+            inputHelper.CheckKeyboard(Keyboard.GetState(), ref gameState);
 
-            //Move missiles
+            if (gameState == GameState.Playing)
+            {
+                foreach (Ship s in activeShips)
+                {
+                    //If ship has controller then check controller input
+                    if (s.HasController)
+                    {
+                        inputHelper.CheckController(GamePad.GetState(s.ControllerIndex, GamePadDeadZone.Circular), s, speed);
+                    }
+                    //If ship has keyboard then check controller input
+                    if (s.HasKeyboard)
+                    {
+                        inputHelper.CheckKeyboardForShip(Keyboard.GetState(), s, speed);
+                    }
+
+                    MoveMissiles(s);
+                }
+
+            }
+        }
+
+        private void MoveMissiles(Ship s)
+        {
             foreach (Missile m in s.Missiles)
             {
                 if (m.YPos > 0)
