@@ -187,11 +187,12 @@ namespace Game1
 
         }
 
-
-        public void CheckKeyboard(KeyboardState newKeyboardState, ref Game1.GameState gameState)
+        KeyboardState oldKeyboardState;
+        public void CheckMenuKeyboard(KeyboardState newKeyboardState, ref Game1.GameState gameState)
         {
             if (newKeyboardState.IsKeyDown(Keys.Escape) && !oldKeyboardState.IsKeyDown(Keys.Escape))
             {
+                System.Console.WriteLine("Escape!");
                 if (gameState == Game1.GameState.Playing)
                 {
                     System.Console.WriteLine("Paus!");
@@ -207,7 +208,8 @@ namespace Game1
             oldKeyboardState = newKeyboardState;
         }
 
-        public void CheckKeyboardForShip(KeyboardState newKeyboardState, Ship ship, float speed)
+
+        private void CheckKeyboard(KeyboardState newKeyboardState, KeyboardState oldKeyboardState, Ship ship, float speed)
         {
             //W, A, S, D
             //if (Keyboard.GetState().IsKeyDown(Keys.W))
@@ -250,7 +252,6 @@ namespace Game1
 
             if (newKeyboardState.IsKeyDown(Keys.Space) && !oldKeyboardState.IsKeyDown(Keys.Space))
             {
-                System.Console.WriteLine("Pew?");
                 ship.FireMain();
             }
             oldKeyboardState = newKeyboardState;
