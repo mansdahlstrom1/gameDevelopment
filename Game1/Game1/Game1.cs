@@ -98,7 +98,7 @@ namespace Game1
             gameBackground.Load(GraphicsDevice, gameBackgroundImage);
             menuBackground.Load(GraphicsDevice, menuBackgroundImage);
 
-            shuttle = Content.Load<Texture2D>("images/DogpoolPortrait"); 
+            shuttle = Content.Load<Texture2D>("images/DogpoolPortrait");
             font = Content.Load<SpriteFont>("myFont");
             activeShips[0].Texture = Content.Load<Texture2D>("images/PontusSpacesaucerPinkPortrait");
             activeShips[1].Texture = Content.Load<Texture2D>("images/DogpoolPortrait");
@@ -222,24 +222,24 @@ namespace Game1
 
             //if (gameState == GameState.Playing)
             //{
-            gameBackground.Draw(spriteBatch);
-            spriteBatch.DrawString(font, "Score: " + score, new Vector2(10, 10), Color.White);
-            spriteBatch.DrawString(font, "Speed: " + speed, new Vector2(10, 30), Color.White);
+                gameBackground.Draw(spriteBatch);
+                spriteBatch.DrawString(font, "Score: " + score, new Vector2(10, 10), Color.White);
+                spriteBatch.DrawString(font, "Speed: " + speed, new Vector2(10, 30), Color.White);
 
-            var deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
-            frameCounter.Update(deltaTime);
-            var fps = string.Format("FPS: {0}", frameCounter.AverageFramesPerSecond);
-            spriteBatch.DrawString(font, fps, new Vector2(10, 50), Color.White);
+                var deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+                frameCounter.Update(deltaTime);
+                var fps = string.Format("FPS: {0}", frameCounter.AverageFramesPerSecond);
+                spriteBatch.DrawString(font, fps, new Vector2(10, 50), Color.White);
 
-            foreach (Ship s in activeShips)
-            {
-                spriteBatch.DrawString(font, "Ship[" + s.ControllerIndex + "] position x,y: " + s.XPos + "," + s.YPos, new Vector2(10, (70 + s.ControllerIndex * 20)), Color.White);
-                spriteBatch.Draw(s.Texture, new Vector2(s.XPos, s.YPos), null, null, null, 0.0f, new Vector2(0.4f));
-                foreach (Missile m in s.Missiles)
+                foreach (Ship s in activeShips)
                 {
-                    spriteBatch.Draw(m.Texture, new Vector2(m.XPos, m.YPos), null, null, null, 0, new Vector2(0.6f));
+                    spriteBatch.DrawString(font, "Ship[" + s.ControllerIndex + "] position x,y: " + s.XPos + "," + s.YPos, new Vector2(10, (70 + s.ControllerIndex * 20)), Color.White);
+                    spriteBatch.Draw(s.Texture, new Vector2(s.XPos, s.YPos), null, null, null, 0.0f, new Vector2(0.4f));
+                    foreach (Missile m in s.Missiles)
+                    {
+                        spriteBatch.Draw(m.Texture, new Vector2(m.XPos, m.YPos), null, null, null, 0, new Vector2(0.6f));
+                    }
                 }
-            } 
             //}
             //else
             if (gameState == GameState.StartMenu)
@@ -268,14 +268,14 @@ namespace Game1
                 // TODO
                 // Loading
 
-
+               
             }
 
 
             spriteBatch.End();
 
 
-            // TODO: Add your drawing code here
+                // TODO: Add your drawing code here
 
             base.Draw(gameTime);
         }
@@ -286,15 +286,15 @@ namespace Game1
             if (gameState == GameState.Playing)
             {
                 foreach (Ship s in activeShips)
-                {
-                    //If ship has controller then check controller input
-                    if (s.HasController)
-                    {
+        {
+            //If ship has controller then check controller input
+            if (s.HasController)
+            {
                         inputHelper.CheckController(GamePad.GetState(s.ControllerIndex, GamePadDeadZone.Circular), s, speed);
-                    }
-                    //If ship has keyboard then check controller input
-                    if (s.HasKeyboard)
-                    {
+            }
+            //If ship has keyboard then check controller input
+            if (s.HasKeyboard)
+            {
                         inputHelper.CheckKeyboardForShip(Keyboard.GetState(), s, speed);
                     }
 
@@ -302,7 +302,7 @@ namespace Game1
                 }
 
             }
-        }
+            }
 
         private void MoveMissiles(Ship s)
         {
