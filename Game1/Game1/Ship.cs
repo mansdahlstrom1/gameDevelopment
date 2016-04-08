@@ -37,8 +37,11 @@ namespace Game1
         private int controllerIndex;
         public int ControllerIndex { get { return controllerIndex; } set { controllerIndex = value; } }
 
+        private List<Missile> missilesToRemove = new List<Missile>();
+        private Missile missileToRemove;
+
         private InputHelper inputHelper = new InputHelper();
-        
+
         //Default constructor
         public Ship()
         {
@@ -85,23 +88,47 @@ namespace Game1
 
         public void FireMain()
         {
-            missiles.Add(new Missile(XPos - 5, YPos, missileTexture));
-            missiles.Add(new Missile(XPos + 40, YPos, missileTexture));
-
-            System.Console.WriteLine("Ships missile count: " + Missiles.Count);
+            if (this.Missiles.Count < 2)
+            {
+                missiles.Add(new Missile(XPos - 5, YPos, missileTexture));
+                missiles.Add(new Missile(XPos + 40, YPos, missileTexture));
+            }
         }
 
-        public void RemoveMissile(Missile m)
+        public void ReMoveMissiles(float speed)
         {
-            try
+            //Remove
+            if (missilesToRemove.Count != 0)
             {
-                missiles.Remove(m);
-                System.Console.WriteLine("RemoveMissile() removed missile from ship - " + controllerIndex);
+                missileToRemove = missilesToRemove[0];
+
+                if (missileToRemove != null)
+                {
+                    try
+                    {
+                        missiles.Remove(missileToRemove);
+                    }
+                    catch (Exception e)
+                    {
+                        System.Console.WriteLine("RemoveMissile() failed");
+                        //System.Console.WriteLine(e.Message);
+                    }
+                    missilesToRemove.Remove(missileToRemove);
+                    missileToRemove = null;
+                }
             }
-            catch (Exception e)
+
+            //Move
+            foreach (Missile m in this.Missiles)
             {
-                System.Console.WriteLine("RemoveMissile() failed");
-                //System.Console.WriteLine(e.Message);
+                if (m.YPos > 0)
+                {
+                    m.Move(speed * 2);
+                }
+                else
+                {
+                    missilesToRemove.Add(m);
+                }
             }
         }
 
