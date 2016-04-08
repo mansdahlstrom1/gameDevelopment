@@ -164,7 +164,7 @@ namespace Game1
             else if (gameState == GameState.Paused)
             {
                 IsMouseVisible = true;
-                    
+
                 if (btnPauseResume.Update(mouseState))
                 {
                     if (gameState == GameState.Paused)
@@ -256,7 +256,7 @@ namespace Game1
                         //{
                         spriteBatch.Draw(m.Texture, new Vector2(m.XPos, m.YPos), null, null, null, 0, new Vector2(0.6f));
                         //}
-                    }
+            }
             //}
             //else
             if (gameState == GameState.StartMenu)
