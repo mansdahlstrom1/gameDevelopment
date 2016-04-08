@@ -13,9 +13,9 @@ namespace Game1
         {
             if (r1.Intersects(r2))
             {
-                return true;
+                return false;
             }
-            return false;
+            return true;
         }
     }
 }
