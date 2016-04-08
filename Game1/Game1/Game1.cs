@@ -16,26 +16,30 @@ namespace Game1
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
-        //private Spaceship spaceship;
         private Background myBackground;
-        private Texture2D shuttle;
-        private Texture2D missileTexture;
         private SpriteFont font;
+
         private int score = 0;
-        private float speed = 3;
+        private float speed = 10.0f;
+
         private FrameCounter frameCounter = new FrameCounter();
-        private Texture2D spriteFont;
+        private InputHelper inputHelper = new InputHelper();
+        private CheckCollisions checkCollisions = new CheckCollisions();
 
-        private float shipRotation = 0.0f;
-
-        InputHelper inputHelper;
-
-        private Ship ship;
+        private List<Ship> activeShips = new List<Ship>();
+        private List<Missile> missilesToRemove = new List<Missile>();
+        private Missile missileToRemove;
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+
+            /* Changes window size
+            graphics.PreferredBackBufferWidth = 1200;
+            graphics.PreferredBackBufferHeight = 900;
+            graphics.ApplyChanges();
+            */
         }
 
         /// <summary>
@@ -48,8 +52,11 @@ namespace Game1
         {
             // TODO: Add your initialization logic here
 
-            inputHelper = new InputHelper();
-            ship = new Ship(50, 50);
+            //Check how many players are active and what controllers are connected and stuff
+            activeShips.Add(new Ship(50, 50, true, true, 0));
+            activeShips.Add(new Ship(300, 100, false, true, 1));
+            //activeShips.Add(new Ship(300, 100, false, true, 2));
+            //activeShips.Add(new Ship(300, 100, false, true, 3));
 
             base.Initialize();
         }
@@ -67,14 +74,17 @@ namespace Game1
             Texture2D background = Content.Load<Texture2D>("images/stars");
             myBackground.Load(GraphicsDevice, background);
 
-            shuttle = Content.Load<Texture2D>("images/DogpoolPortrait");
-            
             font = Content.Load<SpriteFont>("myFont"); // Use the name of your sprite font file here instead of 'Score'.
 
-            missileTexture = Content.Load<Texture2D>("images/laser_small");
+            //Pontus {
+            activeShips[0].Texture = Content.Load<Texture2D>("images/PontusSpacesaucerPinkPortrait");
+            activeShips[1].Texture = Content.Load<Texture2D>("images/DogpoolPortrait");
 
-            ship.MissileTexture = missileTexture;
-            ship.Texture = shuttle;
+            foreach (Ship s in activeShips)
+            {
+                s.MissileTexture = Content.Load<Texture2D>("images/laser_small");
+            }
+            //Pontus }
 
 
             // TODO: use this.Content to load your game content here
@@ -96,24 +106,38 @@ namespace Game1
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
+            {
+                Exit();
+            }
+
             // The time since Update was called last.
             float elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             // TODO: Add your game logic here.
             myBackground.Update(elapsed * 200);
 
-            
-
             score++;
 
-            inputHelper.CheckController(GamePad.GetState(PlayerIndex.One, GamePadDeadZone.Circular), ship);
-            inputHelper.CheckKeyboard(Keyboard.GetState(), ship);
-
-            if (score % 1000 == 1 && speed <= 12)
+            //Pontus {
+            /* Collision detection, todo...
+            foreach (Missile m in ship.Missiles)
             {
-                speed += 3;
+                if (m.Texture.Bounds.Intersects(ship2.Texture.Bounds))
+                {
+                    //ship2IsHit = true;
+                    System.Console.WriteLine("Collision between missile and ship2");
+                    missilesToRemove.Add(m);
+                }
             }
- 
+            */
+            foreach (Ship s in activeShips)
+            {
+                MoveShip(s);
+            }
+
+            //Pontus }
+
             base.Update(gameTime);
         }
 
@@ -123,57 +147,92 @@ namespace Game1
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            
-
-            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
-            {
-                Exit();
-            }
-
-
             GraphicsDevice.Clear(Color.CornflowerBlue);
-           
-            spriteBatch.Begin();
 
-     
+            spriteBatch.Begin();
 
             myBackground.Draw(spriteBatch);
 
             spriteBatch.DrawString(font, "Score: " + score, new Vector2(10, 10), Color.White);
             spriteBatch.DrawString(font, "Speed: " + speed, new Vector2(10, 30), Color.White);
-            // spriteBatch.DrawString(font, "FPS: " + (1000 / gameTime.ElapsedGameTime.Milliseconds), new Vector2(10, 50), Color.White);
-            //FPS counter                     
+
             var deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
             frameCounter.Update(deltaTime);
             var fps = string.Format("FPS: {0}", frameCounter.AverageFramesPerSecond);
             spriteBatch.DrawString(font, fps, new Vector2(10, 50), Color.White);
-            spriteBatch.DrawString(font, "Ship position x,y: " + ship.XPos + "," + ship.YPos, new Vector2(10, 70), Color.White);
 
-            spriteBatch.Draw(ship.Texture, new Vector2(ship.XPos, ship.YPos), null, null, null, shipRotation, null);
+            //Pontus {
+            foreach (Ship s in activeShips)
+            {
+                spriteBatch.DrawString(font, "Ship[" + s.ControllerIndex + "] position x,y: " + s.XPos + "," + s.YPos, new Vector2(10, 70), Color.White);
+                spriteBatch.Draw(s.Texture, new Vector2(s.XPos, s.YPos), null, null, null, 0.0f, new Vector2(0.4f));
 
-            foreach(Missile m in ship.Missiles){
-                spriteBatch.Draw(m.Texture, new Vector2(m.XPos, m.YPos));
-                m.Move();
+                foreach (Missile m in s.Missiles)
+                {
+                    spriteBatch.Draw(m.Texture, new Vector2(m.XPos, m.YPos), null, null, null, 0, new Vector2(0.6f));
+                }
             }
+
+            //checkCollisions.CheckCollision();
+            
+            {
+                System.Console.WriteLine("Collision!");
+            }
+            //Pontus }
 
             spriteBatch.End();
 
-
-            // TODO: Add your drawing code here
-            
             base.Draw(gameTime);
         }
 
+        private void MoveShip(Ship s)
+        {
+            //If ship has controller then check controller input
+            if (s.HasController)
+            {
+                s.Move(GamePad.GetState(s.ControllerIndex, GamePadDeadZone.Circular), speed);
+            }
+            //If ship has keyboard then check controller input
+            if (s.HasKeyboard)
+            {
+                s.Move(Keyboard.GetState(), speed);
+            }
+
+            //Move missiles
+            foreach (Missile m in s.Missiles)
+            {
+                if (m.YPos > 0)
+                {
+                    m.Move(speed * 2);
+                }
+                else
+                {
+                    missilesToRemove.Add(m);
+                }
+            }
+
+            //Remove missiles
+            if (missilesToRemove.Count != 0)
+            {
+                missileToRemove = missilesToRemove[0];
+
+                if (missileToRemove != null)
+                {
+                    s.RemoveMissile(missileToRemove);
+                    missilesToRemove.Remove(missileToRemove);
+                    missileToRemove = null;
+                }
+            }
+        }
 
         // Here we can send in each players specific value!
+        // Not done, don't use
         private bool ShipIsWithinLimits(float playerX, float playerY)
         {
-            if(playerX >= 0 && playerX < (800 - 40) && playerY >= 0 && playerY < (480 -40))
+            if (playerX >= 0 && playerX < (800 - 40) && playerY >= 0 && playerY < (480 - 40))
             {
                 return true;
-            } 
-
-
+            }
             return false;
         }
     }
