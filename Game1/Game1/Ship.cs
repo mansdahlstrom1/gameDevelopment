@@ -71,22 +71,11 @@ namespace Game1
         }
         */
 
-
-        //Needs fix {
-        public void Move(KeyboardState newKeyboardState, float speed)
-        {
-            inputHelper.CheckKeyboard(newKeyboardState, this, speed);
-        }
-        public void Move(GamePadState newGamePadState, float speed)
-        {
-            inputHelper.CheckController(newGamePadState, this, speed);
-        }
         public void Move(float x, float y)
         {
             XPos += x;
             YPos += y;
         }
-            //}
 
         public void ResetPosition()
         {
