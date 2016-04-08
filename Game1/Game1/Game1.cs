@@ -40,11 +40,9 @@ namespace Game1
         private float speed = 10;
         private FrameCounter frameCounter = new FrameCounter();
 
-
         private GameState gameState;
         private InputHelper inputHelper = new InputHelper();
         private CheckCollisions checkCollisions = new CheckCollisions();
-
 
         private List<Ship> activeShips = new List<Ship>();
         private List<Missile> missilesToRemove = new List<Missile>();
@@ -99,11 +97,6 @@ namespace Game1
 
             gameBackground.Load(GraphicsDevice, gameBackgroundImage);
             menuBackground.Load(GraphicsDevice, menuBackgroundImage);
-
-            Texture2D TextureBtn1 = Content.Load<Texture2D>("images/button");
-            btn1 = new Button(TextureBtn1, GraphicsDevice, "Play Game");
-            btn1.setPosition(new Vector2(350, 200));
-
 
             shuttle = Content.Load<Texture2D>("images/DogpoolPortrait");
             font = Content.Load<SpriteFont>("myFont");
@@ -163,7 +156,7 @@ namespace Game1
                 //This makes the background scroll
                 gameBackground.Update(elapsed * 200);
                 IsMouseVisible = false;
-                    
+
                 score += ((int)speed / 2);
             }
             else if (gameState == GameState.Paused)
@@ -196,12 +189,12 @@ namespace Game1
                     {
                         gameState = GameState.Playing;
                     }
-            }
+                }
                 else if (btnStartMenuOptions.Update(mouseState))
                 {
                     // What happend is Options is pressed
 
-                }
+                    }
                 else if (btnStartMenuExit.Update(mouseState))
                 {
                     // What happend is Exit is pressed
@@ -229,24 +222,24 @@ namespace Game1
 
             //if (gameState == GameState.Playing)
             //{
-                gameBackground.Draw(spriteBatch);
-                spriteBatch.DrawString(font, "Score: " + score, new Vector2(10, 10), Color.White);
-                spriteBatch.DrawString(font, "Speed: " + speed, new Vector2(10, 30), Color.White);
+            gameBackground.Draw(spriteBatch);
+            spriteBatch.DrawString(font, "Score: " + score, new Vector2(10, 10), Color.White);
+            spriteBatch.DrawString(font, "Speed: " + speed, new Vector2(10, 30), Color.White);
 
-                var deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
-                frameCounter.Update(deltaTime);
-                var fps = string.Format("FPS: {0}", frameCounter.AverageFramesPerSecond);
-                spriteBatch.DrawString(font, fps, new Vector2(10, 50), Color.White);
+            var deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            frameCounter.Update(deltaTime);
+            var fps = string.Format("FPS: {0}", frameCounter.AverageFramesPerSecond);
+            spriteBatch.DrawString(font, fps, new Vector2(10, 50), Color.White);
 
-                foreach (Ship s in activeShips)
+            foreach (Ship s in activeShips)
+            {
+                spriteBatch.DrawString(font, "Ship[" + s.ControllerIndex + "] position x,y: " + s.XPos + "," + s.YPos, new Vector2(10, (70 + s.ControllerIndex * 20)), Color.White);
+                spriteBatch.Draw(s.Texture, new Vector2(s.XPos, s.YPos), null, null, null, 0.0f, new Vector2(0.4f));
+                foreach (Missile m in s.Missiles)
                 {
-                    spriteBatch.DrawString(font, "Ship[" + s.ControllerIndex + "] position x,y: " + s.XPos + "," + s.YPos, new Vector2(10, (70 + s.ControllerIndex * 20)), Color.White);
-                    spriteBatch.Draw(s.Texture, new Vector2(s.XPos, s.YPos), null, null, null, 0.0f, new Vector2(0.4f));
-                    foreach (Missile m in s.Missiles)
-                    {
-                        spriteBatch.Draw(m.Texture, new Vector2(m.XPos, m.YPos), null, null, null, 0, new Vector2(0.6f));
-                    }
+                    spriteBatch.Draw(m.Texture, new Vector2(m.XPos, m.YPos), null, null, null, 0, new Vector2(0.6f));
                 }
+            } 
             //}
             //else
             if (gameState == GameState.StartMenu)

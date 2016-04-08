@@ -30,7 +30,7 @@ namespace Game1
             // Width 800    height = 460:
             // button 100   height = 23;
             size = new Vector2(graphicsDevice.Viewport.Width / 5, graphicsDevice.Viewport.Height / 10);
-
+           
             margins = utils.centerText(font, text);
 
         }
@@ -67,7 +67,7 @@ namespace Game1
         }
 
         public void Draw(SpriteBatch spriteBatch, SpriteFont font)
-        {
+        {   
             // System.Drawing
             spriteBatch.Draw(texture, rec, color);
             spriteBatch.DrawString(font, text, new Vector2(position.X + margins[0], position.Y + margins[1]), Color.White);
