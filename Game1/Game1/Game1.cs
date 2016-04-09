@@ -24,7 +24,7 @@ namespace Game1
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
-        //private Spaceship spaceship;
+        //private SpacePlayerShip spacePlayerShip;
         private Background gameBackground;
         private Background menuBackground;
         private Texture2D shuttle;
@@ -44,7 +44,7 @@ namespace Game1
         private InputHelper inputHelper = new InputHelper();
         private CheckCollisions checkCollisions = new CheckCollisions();
 
-        private List<Ship> activeShips = new List<Ship>();
+        private List<PlayerShip> activePlayerShips = new List<PlayerShip>();
         private List<GamePadState> activeControllerStates = new List<GamePadState>();
 
         public Game1()
@@ -71,10 +71,10 @@ namespace Game1
 
             gameState = GameState.Playing;
             //Check how many players are active and what controllers are connected and stuff
-            activeShips.Add(new Ship(50, 50, true, true, 0));
-            activeShips.Add(new Ship(300, 100, false, true, 1));
-            //activeShips.Add(new Ship(300, 100, false, true, 2));
-            //activeShips.Add(new Ship(300, 100, false, true, 3));
+            activePlayerShips.Add(new PlayerShip(50, 50, true, true, 0));
+            activePlayerShips.Add(new PlayerShip(300, 100, false, true, 1));
+            //activePlayerShips.Add(new PlayerShip(300, 100, false, true, 2));
+            //activePlayerShips.Add(new PlayerShip(300, 100, false, true, 3));
 
             base.Initialize();
         }
@@ -99,8 +99,8 @@ namespace Game1
 
             shuttle = Content.Load<Texture2D>("images/DogpoolPortrait");
             font = Content.Load<SpriteFont>("myFont");
-            activeShips[0].Texture = Content.Load<Texture2D>("images/PontusSpacesaucerPinkPortrait");
-            activeShips[1].Texture = Content.Load<Texture2D>("images/DogpoolPortrait");
+            activePlayerShips[0].Texture = Content.Load<Texture2D>("images/PontusSpacesaucerPinkPortrait");
+            activePlayerShips[1].Texture = Content.Load<Texture2D>("images/DogpoolPortrait");
 
 
             //Buttons
@@ -210,7 +210,7 @@ namespace Game1
 
             if (gameState == GameState.Playing)
             {
-                foreach (Ship s in activeShips)
+                foreach (PlayerShip s in activePlayerShips)
                 {
                     //Add the state of active controllers to a list to be sent to input helper
                     activeControllerStates.Add(GamePad.GetState(s.ControllerIndex, GamePadDeadZone.Circular));
@@ -218,7 +218,7 @@ namespace Game1
                     s.ReMoveMissiles(speed);
                 }
 
-                inputHelper.CheckGameInput(activeShips, activeControllerStates, Keyboard.GetState(), speed);
+                inputHelper.CheckGameInput(activePlayerShips, activeControllerStates, Keyboard.GetState(), speed, gameTime);
                 activeControllerStates.Clear();
             }
 
@@ -246,9 +246,9 @@ namespace Game1
                 var fps = string.Format("FPS: {0}", frameCounter.AverageFramesPerSecond);
                 spriteBatch.DrawString(font, fps, new Vector2(10, 50), Color.White);
 
-                foreach (Ship s in activeShips)
+                foreach (PlayerShip s in activePlayerShips)
                 {
-                    spriteBatch.DrawString(font, "Ship[" + s.ControllerIndex + "] position x,y: " + s.XPos + "," + s.YPos, new Vector2(10, (70 + s.ControllerIndex * 20)), Color.White);
+                    spriteBatch.DrawString(font, "PlayerShip[" + s.ControllerIndex + "] position x,y: " + s.XPos + "," + s.YPos, new Vector2(10, (70 + s.ControllerIndex * 20)), Color.White);
                     spriteBatch.Draw(s.Texture, new Vector2(s.XPos, s.YPos), null, null, null, 0.0f, new Vector2(0.4f));
                     foreach (Missile m in s.Missiles)
                     {
@@ -305,17 +305,20 @@ namespace Game1
         //Test
         private void CollisionCheck()
         {
-            Rectangle rect1 = new Rectangle(new Point((int)activeShips[0].XPos, (int)activeShips[0].YPos), new Point(50));
-            Rectangle rect2 = new Rectangle(new Point((int)activeShips[1].XPos, (int)activeShips[1].YPos), new Point(50));
+
+
+            Rectangle rect1 = new Rectangle(new Point((int)activePlayerShips[0].XPos, (int)activePlayerShips[0].YPos), new Point(50));
+            Rectangle rect2 = new Rectangle(new Point((int)activePlayerShips[1].XPos, (int)activePlayerShips[1].YPos), new Point(50));
             if (rect1.Intersects(rect2))
             {
                 //Collision
+                System.Console.WriteLine("Crash!");
             }
         }
 
         // Here we can send in each players specific value!
         // Not done, don't use
-        private bool ShipIsWithinLimits(float playerX, float playerY)
+        private bool PlayerShipIsWithinLimits(float playerX, float playerY)
         {
             if (playerX >= 0 && playerX < (800 - 40) && playerY >= 0 && playerY < (480 - 40))
             {

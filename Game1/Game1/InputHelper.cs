@@ -13,25 +13,25 @@ namespace Game1
         GamePadState[] oldGamePadStates = { new GamePadState(), new GamePadState(), new GamePadState(), new GamePadState() };
         KeyboardState oldGameKeyboardState;
 
-        public void CheckGameInput(List<Ship> activeShips, List<GamePadState> newGamePadStates, KeyboardState newGameKeyBoardState, float speed)
+        public void CheckGameInput(List<PlayerShip> activePlayerShips, List<GamePadState> newGamePadStates, KeyboardState newGameKeyBoardState, float speed, GameTime gameTime)
         {
-            foreach (Ship s in activeShips)
+            foreach (PlayerShip s in activePlayerShips)
             {
                 if (s.HasController)
                 {
-                    CheckController(newGamePadStates[s.ControllerIndex], oldGamePadStates[s.ControllerIndex],  s, speed);
+                    CheckController(newGamePadStates[s.ControllerIndex], oldGamePadStates[s.ControllerIndex],  s, speed, gameTime);
                     oldGamePadStates[s.ControllerIndex] = newGamePadStates[s.ControllerIndex];
                 }
-                //If ship has keyboard then check controller input
+                //If PlayerShip has keyboard then check controller input
                 if (s.HasKeyboard)
                 {
-                    CheckKeyboard(newGameKeyBoardState, oldGameKeyboardState, s, speed);
+                    CheckKeyboard(newGameKeyBoardState, oldGameKeyboardState, s, speed, gameTime);
                     oldGameKeyboardState = newGameKeyBoardState;
                 }
             }
         }
 
-        private void CheckController(GamePadState newGamePadState, GamePadState oldGamePadState, Ship ship, float speed)
+        private void CheckController(GamePadState newGamePadState, GamePadState oldGamePadState, PlayerShip PlayerShip, float speed, GameTime gameTime)
         {
             //A, B, X, Y
             if (newGamePadState.Buttons.A == ButtonState.Pressed && oldGamePadState.Buttons.A == ButtonState.Released)
@@ -55,7 +55,7 @@ namespace Game1
             //Shoulders
             if (newGamePadState.Buttons.RightShoulder == ButtonState.Pressed && oldGamePadState.Buttons.RightShoulder == ButtonState.Released)
             {
-                ship.FireMain();
+                PlayerShip.FireMain(gameTime);
             }
             if (newGamePadState.Buttons.LeftShoulder == ButtonState.Pressed && oldGamePadState.Buttons.LeftShoulder == ButtonState.Released)
             {
@@ -71,14 +71,14 @@ namespace Game1
             }
             if (newGamePadState.Triggers.Left == 1 && oldGamePadState.Triggers.Left != 1)
             {
-                ship.FireSecondary();
+
             }
 
 
             //Start, back and big button
             if (newGamePadState.Buttons.Start == ButtonState.Pressed && oldGamePadState.Buttons.Start == ButtonState.Released)
             {
-                ship.ResetPosition();
+
             }
             if (newGamePadState.Buttons.BigButton == ButtonState.Pressed && oldGamePadState.Buttons.BigButton == ButtonState.Released)
             {
@@ -99,22 +99,22 @@ namespace Game1
             //Up
             if (newGamePadState.ThumbSticks.Left.Y > 0)
             {
-                ship.Move(0, (newGamePadState.ThumbSticks.Left.Y * speed) * -1);
+                PlayerShip.Move(0, (newGamePadState.ThumbSticks.Left.Y * speed) * -1);
             }
             //Down
             if (newGamePadState.ThumbSticks.Left.Y < 0)
             {
-                ship.Move(0, (newGamePadState.ThumbSticks.Left.Y * speed) * -1);
+                PlayerShip.Move(0, (newGamePadState.ThumbSticks.Left.Y * speed) * -1);
             }
             //Left
             if (newGamePadState.ThumbSticks.Left.X < 0)
             {
-                ship.Move((newGamePadState.ThumbSticks.Left.X * speed), 0);
+                PlayerShip.Move((newGamePadState.ThumbSticks.Left.X * speed), 0);
             }
             //Right
             if (newGamePadState.ThumbSticks.Left.X > 0)
             {
-                ship.Move(newGamePadState.ThumbSticks.Left.X * speed, 0);
+                PlayerShip.Move(newGamePadState.ThumbSticks.Left.X * speed, 0);
             }
 
 
@@ -209,50 +209,50 @@ namespace Game1
         }
 
 
-        private void CheckKeyboard(KeyboardState newKeyboardState, KeyboardState oldKeyboardState, Ship ship, float speed)
+        private void CheckKeyboard(KeyboardState newKeyboardState, KeyboardState oldKeyboardState, PlayerShip PlayerShip, float speed, GameTime gameTime)
         {
             //W, A, S, D
             //if (Keyboard.GetState().IsKeyDown(Keys.W))
             if (newKeyboardState.IsKeyDown(Keys.W))//&& !oldState.IsKeyDown(Keys.W))
             {
-                ship.Move(0, speed * -1);
+                PlayerShip.Move(0, speed * -1);
             }
             if (newKeyboardState.IsKeyDown(Keys.S))//&& !oldState.IsKeyDown(Keys.S))
             {
-                ship.Move(0, speed);
+                PlayerShip.Move(0, speed);
             }
             if (newKeyboardState.IsKeyDown(Keys.A))//&& !oldState.IsKeyDown(Keys.A))
             {
-                ship.Move(speed * -1, 0);
+                PlayerShip.Move(speed * -1, 0);
             }
             if (newKeyboardState.IsKeyDown(Keys.D))//&& !oldState.IsKeyDown(Keys.D))
             {
-                ship.Move(speed, 0);
+                PlayerShip.Move(speed, 0);
             }
 
             //Arrow keys
             if (newKeyboardState.IsKeyDown(Keys.Up))//&& !oldState.IsKeyDown(Keys.W))
             {
-                ship.Move(0, speed * -1);
+                PlayerShip.Move(0, speed * -1);
             }
             if (newKeyboardState.IsKeyDown(Keys.Down))//&& !oldState.IsKeyDown(Keys.S))
             {
-                ship.Move(0, speed);
+                PlayerShip.Move(0, speed);
             }
             if (newKeyboardState.IsKeyDown(Keys.Left))//&& !oldState.IsKeyDown(Keys.A))
             {
-                ship.Move(speed * -1, 0);
+                PlayerShip.Move(speed * -1, 0);
             }
             if (newKeyboardState.IsKeyDown(Keys.Right))//&& !oldState.IsKeyDown(Keys.D))
             {
-                ship.Move(speed, 0);
+                PlayerShip.Move(speed, 0);
             }
 
             //Space, Escape
 
             if (newKeyboardState.IsKeyDown(Keys.Space) && !oldKeyboardState.IsKeyDown(Keys.Space))
             {
-                ship.FireMain();
+                PlayerShip.FireMain(gameTime);
             }
             oldKeyboardState = newKeyboardState;
         }
