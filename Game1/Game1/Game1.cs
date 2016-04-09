@@ -183,10 +183,10 @@ namespace Game1
                     spriteBatch.Draw(s.Texture, new Vector2(s.XPos, s.YPos), null, null, null, 0.0f, new Vector2(0.4f));
                     foreach (Missile m in s.Missiles)
                     {
-                        if (CollisionCheck())
-                        {
+                        //if (CollisionCheck())
+                        //{
                             spriteBatch.Draw(m.Texture, new Vector2(m.XPos, m.YPos), null, null, null, 0, new Vector2(0.6f));
-                        }
+                        //}
                     }
                 }
             }
