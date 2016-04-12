@@ -29,7 +29,7 @@ namespace Game1
 
             // Width 800    height = 460:
             // button 100   height = 23;
-            size = new Vector2(graphicsDevice.Viewport.Width / 8, graphicsDevice.Viewport.Height / 20);
+            size = new Vector2(graphicsDevice.Viewport.Width / 5, graphicsDevice.Viewport.Height / 10);
 
             margins = utils.centerText(font, text);
 

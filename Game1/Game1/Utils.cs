@@ -35,13 +35,13 @@ namespace Game1
             // Static width for button is 100
             // TODO
             // Get a responsive width from button object.
-            this.fontMarginLeft = (int)(100 - fontDimensions.X) / 2;
+            this.fontMarginLeft = (int)(160 - fontDimensions.X) / 2;
 
             //LEFT
             // Static width for button is 23
             // TODO
             // Get a responsive width from button object.
-            this.fontMarginTop = (int)(23 - fontDimensions.Y) / 2;
+            this.fontMarginTop = (int)(46 - fontDimensions.Y) / 2;
 
             if (this.fontMarginLeft < 0)
             {

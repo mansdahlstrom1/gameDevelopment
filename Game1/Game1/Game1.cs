@@ -107,19 +107,19 @@ namespace Game1
             //Buttons
             Texture2D TextureBtn = Content.Load<Texture2D>("images/button");
             btnPauseResume = new Button(TextureBtn, GraphicsDevice, "Resume", font);
-            btnPauseResume.setPosition(new Vector2(350, 160));
+            btnPauseResume.setPosition(new Vector2(320, 200));
 
             btnPauseMainMenu = new Button(TextureBtn, GraphicsDevice, "Main Menu", font);
-            btnPauseMainMenu.setPosition(new Vector2(350, 200));
+            btnPauseMainMenu.setPosition(new Vector2(320, 260));
 
             btnStartMenuPlay = new Button(TextureBtn, GraphicsDevice, "Play", font);
-            btnStartMenuPlay.setPosition(new Vector2(350, 160));
+            btnStartMenuPlay.setPosition(new Vector2(320, 140));
 
             btnStartMenuOptions = new Button(TextureBtn, GraphicsDevice, "Options", font);
-            btnStartMenuOptions.setPosition(new Vector2(350, 200));
+            btnStartMenuOptions.setPosition(new Vector2(320, 200));
 
             btnStartMenuExit = new Button(TextureBtn, GraphicsDevice, "Exit", font);
-            btnStartMenuExit.setPosition(new Vector2(350, 240));
+            btnStartMenuExit.setPosition(new Vector2(320, 260));
 
 
             foreach (Ship s in activeShips)
@@ -198,7 +198,10 @@ namespace Game1
                 else if (btnStartMenuExit.Update(mouseState))
                 {
                     // What happend is Exit is pressed
-
+                    if (gameState == GameState.StartMenu)
+                    {
+                        System.Environment.Exit(1);
+                    }
                 }
             }
             CheckInput(activeShips);
