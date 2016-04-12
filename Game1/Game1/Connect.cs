@@ -12,9 +12,10 @@ namespace Game1
 {
     class Connect
     {
-        MySql.Data.MySqlClient.MySqlConnection conn;
+        MySqlConnection conn;
         string myConnectionString = null;
-        String sql = null;
+        MySqlDataReader dataReader;
+
         public Connect()
         {
             Console.WriteLine("We are here");
@@ -25,7 +26,6 @@ namespace Game1
             {
                 conn = new MySql.Data.MySqlClient.MySqlConnection();
                 conn.ConnectionString = myConnectionString;
-                conn.Open();
 
             }
             catch (MySql.Data.MySqlClient.MySqlException ex)
@@ -34,32 +34,38 @@ namespace Game1
             }
         }
 
-        public void RunSQLStatement(String sql, String param1 = null, String param2 = null, String param3 = null)
+        public Player getPlayerByUsername(String username)
         {
+            conn.Open();
             MySqlCommand cmd;
             MySqlDataReader rdr;
+            string sql = "select * from user where username = @username";
+            Player p1 = new Player();
 
-            if (param1 != null && param2 == null && param3 == null)
-            {
-               
-                // 1 input parameter are avaliable
-            } else if (param1 != null && param2 != null && param3 == null)
-            {
-             
-                // 2 input parameters are avaliable
-            } else if (param1 != null && param2 != null && param3 != null)
-            {
 
-                // 3 input parameters are avaibable
-            } else
+            cmd = new MySqlCommand();
+            cmd.Connection = conn;
+            cmd.CommandText = sql;
+            cmd.Prepare();
+            cmd.Parameters.AddWithValue("@username", username);
+
+
+
+            rdr = cmd.ExecuteReader();
+
+            while (rdr.Read())
             {
-                cmd = new MySqlCommand(sql, conn);
-                rdr = cmd.ExecuteReader();
-                while (rdr.Read())
-                {
-                    Console.WriteLine(rdr[0]);
-                }
+                p1.Username = rdr.GetString("username");
+                p1.Activty = (DateTime)rdr.GetMySqlDateTime("activity");
+                p1.Coins = rdr.GetInt32("coins");
+                p1.Created = (DateTime)rdr.GetMySqlDateTime("created");
+                p1.IsAdmin = rdr.GetBoolean("isAdmin");
+            
             }
+            return p1;
+            conn.Close();
+
         }
     }
+
 }

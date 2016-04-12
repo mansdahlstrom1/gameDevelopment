@@ -40,17 +40,27 @@ namespace Game1
         private float speed = 10;
         private FrameCounter frameCounter = new FrameCounter();
 
+        
+
         private GameState gameState;
+        private GameTime gameTime;
+
         private InputHelper inputHelper = new InputHelper();
         private CheckCollisions checkCollisions = new CheckCollisions();
 
         private List<PlayerShip> activePlayerShips = new List<PlayerShip>();
         private List<GamePadState> activeControllerStates = new List<GamePadState>();
 
+        private Connect con;
+        private Player p1;
+        
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+
+
 
             /* Changes window size
             graphics.PreferredBackBufferWidth = 1200;
@@ -70,12 +80,16 @@ namespace Game1
             // TODO: Add your initialization logic here
 
             gameState = GameState.Playing;
-            //Check how many players are active and what controllers are connected and stuff
-            activePlayerShips.Add(new PlayerShip(50, 50, true, true, 0));
-            activePlayerShips.Add(new PlayerShip(300, 100, false, true, 1));
-            //activePlayerShips.Add(new PlayerShip(300, 100, false, true, 2));
-            //activePlayerShips.Add(new PlayerShip(300, 100, false, true, 3));
+            gameTime = new GameTime();
 
+            //Check how many players are active and what controllers are connected and stuff
+            activePlayerShips.Add(new PlayerShip(true, true, 0));
+            activePlayerShips.Add(new PlayerShip(false, true, 1));
+            //activePlayerShips.Add(new PlayerShip(false, true, 2));
+            //activePlayerShips.Add(new PlayerShip(false, true, 3));
+            con = new Connect();
+            Player p1 = con.getPlayerByUsername("dahlan1337");
+            System.Console.WriteLine(p1.Username);
             base.Initialize();
         }
 
@@ -312,7 +326,7 @@ namespace Game1
             if (rect1.Intersects(rect2))
             {
                 //Collision
-                System.Console.WriteLine("Crash!");
+                //System.Console.WriteLine("Crash!");
             }
         }
 

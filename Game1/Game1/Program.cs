@@ -14,9 +14,6 @@ namespace Game1
         [STAThread]
         static void Main()
         {
-
-            Connect con = new Connect();
-            con.RunSQLStatement("select * from user where username = ?", "dahlan1337");
             
             using (var game = new Game1())
                game.Run();
