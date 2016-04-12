@@ -17,10 +17,10 @@ namespace Game1
         {
 
             foreach (PlayerShip s in activePlayerShips)
-            {
+        {
                 if (s.HasController)
                 {
-                    CheckController(newGamePadStates[s.ControllerIndex], oldGamePadStates[s.ControllerIndex],  s, speed, gameTime);
+                    CheckController(newGamePadStates[s.ControllerIndex], oldGamePadStates[s.ControllerIndex], s, speed, gameTime);
                     oldGamePadStates[s.ControllerIndex] = newGamePadStates[s.ControllerIndex];
                 }
                 //If PlayerShip has keyboard then check controller input
@@ -32,7 +32,7 @@ namespace Game1
             }
         }
 
-        private void CheckController(GamePadState newGamePadState, GamePadState oldGamePadState, PlayerShip PlayerShip, float speed, GameTime gameTime)
+        private void CheckController(GamePadState newGamePadState, GamePadState oldGamePadState, PlayerShip ship, float speed, GameTime gameTime)
         {
             //A, B, X, Y
             if (newGamePadState.Buttons.A == ButtonState.Pressed && oldGamePadState.Buttons.A == ButtonState.Released)
@@ -56,7 +56,7 @@ namespace Game1
             //Shoulders
             if (newGamePadState.Buttons.RightShoulder == ButtonState.Pressed && oldGamePadState.Buttons.RightShoulder == ButtonState.Released)
             {
-                PlayerShip.FireMain(gameTime);
+                ship.FireMain(gameTime);
             }
             if (newGamePadState.Buttons.LeftShoulder == ButtonState.Pressed && oldGamePadState.Buttons.LeftShoulder == ButtonState.Released)
             {
@@ -100,22 +100,22 @@ namespace Game1
             //Up
             if (newGamePadState.ThumbSticks.Left.Y > 0)
             {
-                PlayerShip.Move(0, (newGamePadState.ThumbSticks.Left.Y * speed) * -1);
+                ship.Move(0, (newGamePadState.ThumbSticks.Left.Y * speed) * -1);
             }
             //Down
             if (newGamePadState.ThumbSticks.Left.Y < 0)
             {
-                PlayerShip.Move(0, (newGamePadState.ThumbSticks.Left.Y * speed) * -1);
+                ship.Move(0, (newGamePadState.ThumbSticks.Left.Y * speed) * -1);
             }
             //Left
             if (newGamePadState.ThumbSticks.Left.X < 0)
             {
-                PlayerShip.Move((newGamePadState.ThumbSticks.Left.X * speed), 0);
+                ship.Move((newGamePadState.ThumbSticks.Left.X * speed), 0);
             }
             //Right
             if (newGamePadState.ThumbSticks.Left.X > 0)
             {
-                PlayerShip.Move(newGamePadState.ThumbSticks.Left.X * speed, 0);
+                ship.Move(newGamePadState.ThumbSticks.Left.X * speed, 0);
             }
 
 

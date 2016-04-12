@@ -29,7 +29,7 @@ namespace Game1
 
         private List<Missile> missilesToRemove = new List<Missile>();
         private Missile missileToRemove;
-
+        
         //private Sprite sprite; //Replaces Texture2D
         //public Sprite Sprite { get { return sprite; } set { sprite = value; } }
 
@@ -38,10 +38,9 @@ namespace Game1
             XPos += x;
             YPos += y;
         }
-        
+
         public void FireMain()
         {
-
         }
 
         public void ReMoveMissiles(float speed)
@@ -52,30 +51,29 @@ namespace Game1
                 missileToRemove = missilesToRemove[0];
 
                 if (missileToRemove != null)
-                {
-                    try
-                    {
+        {
+            try
+            {
                         missiles.Remove(missileToRemove);
-                    }
-                    catch (Exception e)
-                    {
-                        System.Console.WriteLine("RemoveMissile() failed");
-                        //System.Console.WriteLine(e.Message);
-                    }
                     missilesToRemove.Remove(missileToRemove);
                     missileToRemove = null;
-                }
             }
+            catch (Exception e)
+            {
+                    Console.WriteLine("RemoveMissile() failed");
+                    //Console.WriteLine(e.Message);
+        }
 
+            }
             //Move
             foreach (Missile m in this.Missiles)
             {
                 if (m.YPos > 0)
-                {
+        {
                     m.Move(speed * 2);
-                }
+        }
                 else
-                {
+        {
                     missilesToRemove.Add(m);
                 }
             }
