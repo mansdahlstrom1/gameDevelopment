@@ -15,6 +15,7 @@ namespace Game1
 
         public void CheckGameInput(List<PlayerShip> activePlayerShips, List<GamePadState> newGamePadStates, KeyboardState newGameKeyBoardState, float speed, GameTime gameTime)
         {
+
             foreach (PlayerShip s in activePlayerShips)
             {
                 if (s.HasController)

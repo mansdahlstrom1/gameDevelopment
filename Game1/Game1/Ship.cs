@@ -13,8 +13,8 @@ namespace Game1
     abstract class Ship
     {
         //private Point position;
-        private float xPos;
-        private float yPos;
+        private float xPos = 100;
+        private float yPos = 100;
         public float XPos { get { return xPos; } set { xPos = value; } }
         public float YPos { get { return yPos; } set { yPos = value; } }
 
@@ -33,32 +33,15 @@ namespace Game1
         //private Sprite sprite; //Replaces Texture2D
         //public Sprite Sprite { get { return sprite; } set { sprite = value; } }
 
-
-        //Default constructor
-        public Ship()
-        {
-
-        }
-
         public void Move(float x, float y)
         {
             XPos += x;
             YPos += y;
         }
-
-        private int missileCooldownMS = 500;
-        private GameTime oldTime;
-
-        public void FireMain(GameTime newTime)
+        
+        public void FireMain()
         {
-            if ((newTime.ElapsedGameTime.Milliseconds - oldTime.ElapsedGameTime.Milliseconds) > missileCooldownMS)
-            {
-                if (this.Missiles.Count < 4)
-                {
-                    Missiles.Add(new Missile(XPos - 5, YPos, MissileTexture));
-                    Missiles.Add(new Missile(XPos + 40, YPos, MissileTexture));
-                }
-            }
+
         }
 
         public void ReMoveMissiles(float speed)
