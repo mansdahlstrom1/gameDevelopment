@@ -29,7 +29,7 @@ namespace Game1
 
         private List<Missile> missilesToRemove = new List<Missile>();
         private Missile missileToRemove;
-        
+
         //private Sprite sprite; //Replaces Texture2D
         //public Sprite Sprite { get { return sprite; } set { sprite = value; } }
 
@@ -41,42 +41,35 @@ namespace Game1
 
         public void FireMain()
         {
-
         }
 
         public void ReMoveMissiles(float speed)
         {
-            missiles.Add(new Missile(XPos - 5, YPos, missileTexture));
-            missiles.Add(new Missile(XPos + 40, YPos, missileTexture));
-
-            System.Console.WriteLine("Ships missile count: " + Missiles.Count);
-        }
-
-                if (missileToRemove != null)
-        {
-            try
+            //Remove
+            if (missileToRemove != null)
             {
-                        missiles.Remove(missileToRemove);
-            }
-            catch (Exception e)
-            {
-                System.Console.WriteLine("RemoveMissile() failed");
-                //System.Console.WriteLine(e.Message);
-            }
+                try
+                {
+                    missiles.Remove(missileToRemove);
                     missilesToRemove.Remove(missileToRemove);
                     missileToRemove = null;
                 }
-        }
-
+                catch (Exception e)
+                {
+                    Console.WriteLine("RemoveMissile() failed");
+                    //Console.WriteLine(e.Message);
+                }
+                
+            }
             //Move
             foreach (Missile m in this.Missiles)
             {
                 if (m.YPos > 0)
-        {
+                {
                     m.Move(speed * 2);
-        }
+                }
                 else
-        {
+                {
                     missilesToRemove.Add(m);
                 }
             }

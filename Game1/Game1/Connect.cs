@@ -18,17 +18,15 @@ namespace Game1
 
         public Connect()
         {
-            Console.WriteLine("We are here");
-          
             myConnectionString = "server=89.236.61.189;database=nyancat;uid=remote_user;pwd=PASSWORD;";
 
             try
             {
-                conn = new MySql.Data.MySqlClient.MySqlConnection();
+                conn = new MySqlConnection();
                 conn.ConnectionString = myConnectionString;
 
             }
-            catch (MySql.Data.MySqlClient.MySqlException ex)
+            catch (MySqlException ex)
             {
                 Console.WriteLine(ex.Message);
             }
