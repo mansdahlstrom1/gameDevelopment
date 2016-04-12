@@ -52,7 +52,7 @@ namespace Game1
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-          
+
 
 
             /* Changes window size
@@ -153,14 +153,14 @@ namespace Game1
 
 
             if (gameState == GameState.Playing)
-            {
+                {
                 foreach (PlayerShip s in activePlayerShips)
                 {
                     //Add the state of active controllers to a list to be sent to input helper
                     activeControllerStates.Add(GamePad.GetState(s.ControllerIndex, GamePadDeadZone.Circular));
                     //Move and remove missiles
                     s.ReMoveMissiles(speed);
-                }
+            }
 
                 inputHelper.CheckGameInput(activePlayerShips, activeControllerStates, Keyboard.GetState(), speed, gameTime);
                 activeControllerStates.Clear();
@@ -198,7 +198,7 @@ namespace Game1
                     {
                         //if (CollisionCheck())
                         //{
-                            spriteBatch.Draw(m.Texture, new Vector2(m.XPos, m.YPos), null, null, null, 0, new Vector2(0.6f));
+                        spriteBatch.Draw(m.Texture, new Vector2(m.XPos, m.YPos), null, null, null, 0, new Vector2(0.6f));
                         //}
                     }
                 }
@@ -224,14 +224,14 @@ namespace Game1
                 // TODO
                 // Loading
 
-
+               
             }
 
 
             spriteBatch.End();
 
 
-            // TODO: Add your drawing code here
+                // TODO: Add your drawing code here
 
             base.Draw(gameTime);
         }
@@ -244,7 +244,7 @@ namespace Game1
             Rectangle rect1 = new Rectangle(new Point((int)activePlayerShips[0].XPos, (int)activePlayerShips[0].YPos), new Point(50));
             Rectangle rect2 = new Rectangle(new Point((int)activePlayerShips[1].XPos, (int)activePlayerShips[1].YPos), new Point(50));
             if (rect1.Intersects(rect2))
-            {
+                {
                 //Collision
                 //System.Console.WriteLine("Crash!");
             }

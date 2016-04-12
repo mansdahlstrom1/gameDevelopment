@@ -16,8 +16,8 @@ namespace Game1
         public void CheckGameInput(List<PlayerShip> activePlayerShips, List<GamePadState> newGamePadStates, KeyboardState newGameKeyBoardState, float speed, GameTime gameTime)
         {
 
-            foreach (PlayerShip s in activePlayerShips)
-            {
+        public void CheckController(GamePadState newGamePadState, Ship ship, float speed)
+        {
                 if (s.HasController)
                 {
                     CheckController(newGamePadStates[s.ControllerIndex], oldGamePadStates[s.ControllerIndex],  s, speed, gameTime);
@@ -79,7 +79,7 @@ namespace Game1
             //Start, back and big button
             if (newGamePadState.Buttons.Start == ButtonState.Pressed && oldGamePadState.Buttons.Start == ButtonState.Released)
             {
-
+                ship.ResetPosition();
             }
             if (newGamePadState.Buttons.BigButton == ButtonState.Pressed && oldGamePadState.Buttons.BigButton == ButtonState.Released)
             {

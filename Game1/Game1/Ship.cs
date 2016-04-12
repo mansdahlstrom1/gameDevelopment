@@ -29,7 +29,7 @@ namespace Game1
 
         private List<Missile> missilesToRemove = new List<Missile>();
         private Missile missileToRemove;
-
+        
         //private Sprite sprite; //Replaces Texture2D
         //public Sprite Sprite { get { return sprite; } set { sprite = value; } }
 
@@ -38,7 +38,7 @@ namespace Game1
             XPos += x;
             YPos += y;
         }
-        
+
         public void FireMain()
         {
 
@@ -46,36 +46,37 @@ namespace Game1
 
         public void ReMoveMissiles(float speed)
         {
-            //Remove
-            if (missilesToRemove.Count != 0)
-            {
-                missileToRemove = missilesToRemove[0];
+            missiles.Add(new Missile(XPos - 5, YPos, missileTexture));
+            missiles.Add(new Missile(XPos + 40, YPos, missileTexture));
+
+            System.Console.WriteLine("Ships missile count: " + Missiles.Count);
+        }
 
                 if (missileToRemove != null)
-                {
-                    try
-                    {
+        {
+            try
+            {
                         missiles.Remove(missileToRemove);
-                    }
-                    catch (Exception e)
-                    {
-                        System.Console.WriteLine("RemoveMissile() failed");
-                        //System.Console.WriteLine(e.Message);
-                    }
+            }
+            catch (Exception e)
+            {
+                System.Console.WriteLine("RemoveMissile() failed");
+                //System.Console.WriteLine(e.Message);
+            }
                     missilesToRemove.Remove(missileToRemove);
                     missileToRemove = null;
                 }
-            }
+        }
 
             //Move
             foreach (Missile m in this.Missiles)
             {
                 if (m.YPos > 0)
-                {
+        {
                     m.Move(speed * 2);
-                }
+        }
                 else
-                {
+        {
                     missilesToRemove.Add(m);
                 }
             }
