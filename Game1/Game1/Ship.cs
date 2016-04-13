@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 
 namespace Game1
 {
-
     abstract class Ship
     {
         //private Point position;
@@ -52,34 +51,6 @@ namespace Game1
 
             System.Console.WriteLine("Ships missile count: " + Missiles.Count);
         }
-
-        public void RemoveMissile(Missile m)
-        {
-            try
-            {
-                missiles.Remove(m);
-                System.Console.WriteLine("RemoveMissile() removed missile from ship - " + controllerIndex);
-            }
-            catch (Exception e)
-            {
-                System.Console.WriteLine("RemoveMissile() failed");
-                //System.Console.WriteLine(e.Message);
-            }
-        }
-
-            }
-            //Move
-            foreach (Missile m in this.Missiles)
-            {
-                if (m.YPos > 0)
-        {
-                    m.Move(speed * 2);
-        }
-                else
-        {
-                    missilesToRemove.Add(m);
-                }
-            }
-        }
+        
     }
 }

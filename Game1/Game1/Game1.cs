@@ -205,22 +205,23 @@ namespace Game1
                     {
                         gameState = GameState.Playing;
                     }
-            }
+
+                }
                 else if (btnStartMenuOptions.Update(mouseState))
                 {
                     // What happend is Options is pressed
 
-                    }
+                }
                 else if (btnStartMenuExit.Update(mouseState))
                 {
                     // What happend is Exit is pressed
                     if (gameState == GameState.StartMenu)
                     {
-                        System.Environment.Exit(1);
+                        //System.Environment.Exit(1);
                     }
-                    }
+                }
             }
-            CheckInput(activeShips);
+            //CheckInput(activeShips);
 
             if (gameState == GameState.Playing)
                 {
@@ -272,8 +273,6 @@ namespace Game1
                         //}
                     }
                 }
-            }
-            }
             //}
             //else
             if (gameState == GameState.StartMenu)

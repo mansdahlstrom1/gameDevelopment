@@ -184,29 +184,7 @@ namespace Game1
                     System.Console.WriteLine("Play!");
                     gameState = Game1.GameState.Playing;
                 }
-        }
-
-        }
-
-        KeyboardState oldKeyboardState;
-        public void CheckMenuKeyboard(KeyboardState newKeyboardState, ref Game1.GameState gameState)
-        {
-            if (newKeyboardState.IsKeyDown(Keys.Escape) && !oldKeyboardState.IsKeyDown(Keys.Escape))
-            {
-                System.Console.WriteLine("Escape!");
-                if (gameState == Game1.GameState.Playing)
-                {
-                    System.Console.WriteLine("Paus!");
-                    gameState = Game1.GameState.Paused;
-                }
-                else if (gameState == Game1.GameState.Paused)
-                {
-                    System.Console.WriteLine("Play!");
-                    gameState = Game1.GameState.Playing;
-                }
             }
-
-            oldKeyboardState = newKeyboardState;
         }
 
 
