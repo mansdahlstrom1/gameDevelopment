@@ -41,15 +41,15 @@ namespace Game1
             }
             if (newGamePadState.Buttons.B == ButtonState.Pressed && oldGamePadState.Buttons.B == ButtonState.Released)
             {
-                
+
             }
             if (newGamePadState.Buttons.X == ButtonState.Pressed && oldGamePadState.Buttons.X == ButtonState.Released)
             {
-                
+
             }
             if (newGamePadState.Buttons.Y == ButtonState.Pressed && oldGamePadState.Buttons.Y == ButtonState.Released)
             {
-                
+
             }
 
 
@@ -132,7 +132,7 @@ namespace Game1
             //Down
             if (newGamePadState.ThumbSticks.Right.Y < 0)
             {
-                
+
             }
             //Left
             if (newGamePadState.ThumbSticks.Right.X < 0)
@@ -184,7 +184,7 @@ namespace Game1
                     System.Console.WriteLine("Play!");
                     gameState = Game1.GameState.Playing;
                 }
-            }
+        }
 
         }
 

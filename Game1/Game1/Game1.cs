@@ -135,7 +135,7 @@ namespace Game1
             btnStartMenuExit.setPosition(new Vector2(320, 260));
 
 
-            foreach (Ship s in activeShips)
+            foreach (PlayerShip s in activePlayerShips)
             {
                 s.MissileTexture = Content.Load<Texture2D>("images/laser_small");
             }
@@ -184,7 +184,7 @@ namespace Game1
                     if (gameState == GameState.Paused)
                     {
                         gameState = GameState.Playing;
-
+                    
                     }
                 }
                else  if (btnPauseMainMenu.Update(mouseState))
@@ -223,14 +223,14 @@ namespace Game1
             CheckInput(activeShips);
 
             if (gameState == GameState.Playing)
-            {
+                {
                 foreach (PlayerShip s in activePlayerShips)
                 {
                     //Add the state of active controllers to a list to be sent to input helper
                     activeControllerStates.Add(GamePad.GetState(s.ControllerIndex, GamePadDeadZone.Circular));
                     //Move and remove missiles
                     s.ReMoveMissiles(speed);
-                }
+            }
 
                 inputHelper.CheckGameInput(activePlayerShips, activeControllerStates, Keyboard.GetState(), speed, gameTime);
                 activeControllerStates.Clear();
@@ -266,12 +266,13 @@ namespace Game1
                     spriteBatch.Draw(s.Texture, new Vector2(s.XPos, s.YPos), null, null, null, 0.0f, new Vector2(0.4f));
                     foreach (Missile m in s.Missiles)
                     {
-                        if (CollisionCheck())
-                        {
-                            spriteBatch.Draw(m.Texture, new Vector2(m.XPos, m.YPos), null, null, null, 0, new Vector2(0.6f));
-                        }
+                        //if (CollisionCheck())
+                        //{
+                        spriteBatch.Draw(m.Texture, new Vector2(m.XPos, m.YPos), null, null, null, 0, new Vector2(0.6f));
+                        //}
                     }
                 }
+            }
             }
             //}
             //else
@@ -312,9 +313,6 @@ namespace Game1
 
             base.Draw(gameTime);
         }
-        private void CheckInput(List<Ship> activeShips)
-        {
-            inputHelper.CheckKeyboard(Keyboard.GetState(), ref gameState);
 
         //Test
         private void CollisionCheck()
@@ -324,7 +322,7 @@ namespace Game1
             Rectangle rect1 = new Rectangle(new Point((int)activePlayerShips[0].XPos, (int)activePlayerShips[0].YPos), new Point(50));
             Rectangle rect2 = new Rectangle(new Point((int)activePlayerShips[1].XPos, (int)activePlayerShips[1].YPos), new Point(50));
             if (rect1.Intersects(rect2))
-            {
+                {
                 //Collision
                 //System.Console.WriteLine("Crash!");
             }
